@@ -1,0 +1,131 @@
+{
+  "name": "ollama-autopilot",
+  "displayName": "Ollama Autopilot",
+  "description": "Local LLM inline code completion using Ollama.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.108.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ollama-autopilot.showMenu",
+        "title": "Ollama Autopilot: Show Menu"
+      },
+      {
+        "command": "ollama-autopilot.selectModel",
+        "title": "Ollama Autopilot: Select Model"
+      },
+      {
+        "command": "ollama-autopilot.enable",
+        "title": "Ollama Autopilot: Enable"
+      },
+      {
+        "command": "ollama-autopilot.disable",
+        "title": "Ollama Autopilot: Disable"
+      }
+    ],
+    "configuration": {
+      "title": "Ollama Autopilot",
+      "properties": {
+        "ollama-autopilot.general.autopilotEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable Ollama Autopilot",
+          "order": 1
+        },
+        "ollama-autopilot.general.baseUrl": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Ollama API Base URL",
+          "order": 2
+        },
+        "ollama-autopilot.general.autocompleteDelayMs": {
+          "type": "number",
+          "default": 500,
+          "description": "Delay in milliseconds before triggering autocomplete",
+          "order": 3
+        },
+        "ollama-autopilot.general.snoozeTimeMin": {
+          "type": "number",
+          "default": 5,
+          "description": "Time in minutes the Ollama Autopilot will snooze its autocomplete before resuming",
+          "order": 4
+        },
+        "ollama-autopilot.general.modelKeepAliveTimeMin": {
+          "type": "number",
+          "default": 10,
+          "description": "Time in minutes the model should remain loaded in memory (use -1 for unlimited)",
+          "order": 5
+        },
+        "ollama-autopilot.model.modelName": {
+          "type": "string",
+          "default": "",
+          "description": "Ollama model name",
+          "order": 6
+        },
+        "ollama-autopilot.model.promptText": {
+          "type": "string",
+          "editPresentation": "multilineText",
+          "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n\nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n\nExisting code: \n${textBeforeCursor}",
+          "description": "Prompt text. You can use the following template literals in your prompt: ${projectName}, ${fileName}, ${languageId}, ${textBeforeCursor}, ${textAfterCursor}",
+          "order": 7
+        },
+        "ollama-autopilot.model.textBeforeCursorSize": {
+          "type": "number",
+          "default": 16384,
+          "description": "Number of text characters before the cursor that should be considered (keep your models context size in mind)",
+          "order": 8
+        },
+        "ollama-autopilot.model.textAfterCursorSize": {
+          "type": "number",
+          "default": 0,
+          "description": "Number of text characters after the cursor that should be considered (keep your models context size in mind; default prompt does not use this)",
+          "order": 9
+        },
+        "ollama-autopilot.model.maxAutocompleteTokens": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum number of tokens for autocomplete",
+          "order": 10
+        },
+        "ollama-autopilot.model.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Model temperature (typical range 0-0.4)",
+          "order": 11
+        },
+        "ollama-autopilot.model.reasoningEffort": {
+          "type": "string",
+          "default": "not specified",
+          "enum": [ "not specified", "low", "medium", "high" ],
+          "description": "Model's reasoning effort",
+          "order": 12
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.108.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.52.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
