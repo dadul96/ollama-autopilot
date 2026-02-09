@@ -31,44 +31,33 @@ export class ConfigHandler implements vscode.Disposable {
         });
     }
 
+    private getRequired<T>(key: string): T {
+        const value = this._config.get<T>(key);
+
+        if (value === undefined) {
+            throw new Error(
+                `Missing required configuration value: ollama-autopilot.${key}`
+            );
+        }
+
+        return value;
+    }
+
     private loadConfig(): void {
         this._config = vscode.workspace.getConfiguration("ollama-autopilot");
-
-        this._autopilotEnabled =
-            this._config.get<boolean>("general.autopilotEnabled", true);
-
-        this._baseUrl =
-            this._config.get<string>("general.baseUrl", "http://localhost:11434");
-
-        this._autocompleteDelayMs =
-            this._config.get<number>("general.autocompleteDelayMs", 500);
-
-        this._snoozeTimeMin =
-            this._config.get<number>("general.snoozeTimeMin", 5);
-
-        this._modelName =
-            this._config.get<string>("model.modelName", "");
-
-        this._maxAutocompleteTokens =
-            this._config.get<number>("model.maxAutocompleteTokens", 100);
-
-        this._temperature =
-            this._config.get<number>("model.temperature", 0.2);
-
-        this._reasoningEffort =
-            this._config.get<string>("model.reasoningEffort", "not specified");
-
-        this._modelKeepAliveTimeMin =
-            this._config.get<number>("model.modelKeepAliveTimeMin", 10);
-
-        this._promptText =
-            this._config.get<string>("prompt.promptText", "");
-
-        this._textBeforeCursorSize =
-            this._config.get<number>("prompt.textBeforeCursorSize", 16384);
-
-        this._textAfterCursorSize =
-            this._config.get<number>("prompt.textAfterCursorSize", 0);
+        
+        this._autopilotEnabled = this.getRequired<boolean>("general.autopilotEnabled");
+        this._baseUrl = this.getRequired<string>("general.baseUrl");
+        this._autocompleteDelayMs = this.getRequired<number>("general.autocompleteDelayMs");
+        this._snoozeTimeMin = this.getRequired<number>("general.snoozeTimeMin");
+        this._modelName = this.getRequired<string>("model.modelName");
+        this._maxAutocompleteTokens = this.getRequired<number>("model.maxAutocompleteTokens");
+        this._temperature = this.getRequired<number>("model.temperature");
+        this._reasoningEffort = this.getRequired<string>("model.reasoningEffort");
+        this._modelKeepAliveTimeMin = this.getRequired<number>("model.modelKeepAliveTimeMin");
+        this._promptText = this.getRequired<string>("prompt.promptText");
+        this._textBeforeCursorSize = this.getRequired<number>("prompt.textBeforeCursorSize");
+        this._textAfterCursorSize = this.getRequired<number>("prompt.textAfterCursorSize");
     }
 
     dispose(): void {
