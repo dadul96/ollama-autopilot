@@ -2,6 +2,16 @@ import * as vscode from "vscode";
 import { ConfigHandler } from "./configHandler";
 
 
+interface MenuItem extends vscode.QuickPickItem {
+    action?: string;
+}
+
+enum MenuItemAction {
+    Toggle = "toggle",
+    ChangeModel = "changeModel",
+    Settings = "settings"
+}
+
 export class GuiHandler {
     private context: vscode.ExtensionContext;
     private statusBarItem: vscode.StatusBarItem;
@@ -21,8 +31,8 @@ export class GuiHandler {
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
-        this.context.subscriptions.push(this.statusBarItem);
         this.statusBarItem.show();
+        this.context.subscriptions.push(this.statusBarItem);
     }
 
     public indicateOllamaNotReachable() {
@@ -30,7 +40,6 @@ export class GuiHandler {
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
-        this.context.subscriptions.push(this.statusBarItem);
     }
 
     public indicateNoValidModelSelected() {
@@ -38,8 +47,6 @@ export class GuiHandler {
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
-        
-        this.context.subscriptions.push(this.statusBarItem);
     }
 
     public indicateAutopilotDisabled() {
@@ -47,8 +54,6 @@ export class GuiHandler {
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.warningBackground",
         );
-        
-        this.context.subscriptions.push(this.statusBarItem);
     }
 
     public indicateOllamaEnabled() {
@@ -56,62 +61,65 @@ export class GuiHandler {
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.background",
         );
-        
-        this.context.subscriptions.push(this.statusBarItem);
     }
 
-    // for testing only - need to clean up and refactor
     public showMenu() {
-        interface MenuItem extends vscode.QuickPickItem {
-                action?: string;
+        const quickPick = vscode.window.createQuickPick<MenuItem>();
+        const items: MenuItem[] = [
+            {
+                label: this.configHandler.autopilotEnabled
+                    ? "$(debug-stop) Click to disable Ollama Autopilot"
+                    : "$(debug-start) Click to enable Ollama Autopilot",
+                action: MenuItemAction.Toggle,
+            },
+
+            
+            { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
+
+            {
+                label: "$(timeline-unpin) Click to change Ollama model",
+                action: MenuItemAction.ChangeModel,
+            },
+
+            { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
+            
+            {
+                label: "$(gear) Click to open settings",
+                action: MenuItemAction.Settings,
+            },
+        ];
+        quickPick.items = items;
+        quickPick.title = "🦙 Autopilot";
+        quickPick.placeholder = "Select an action";
+
+        quickPick.onDidAccept(() => {
+            const selection = quickPick.selectedItems[0];
+            quickPick.hide();
+
+            if (selection.action) {
+                this.executeAction(selection.action);
             }
+        });
 
-            const items: MenuItem[] = [
-                {
-                    label: this.configHandler.autopilotEnabled
-                        ? "$(debug-stop) Click to disable Ollama Autopilot"
-                        : "$(debug-start) Click to enable Ollama Autopilot",
-                    action: "toggle",
-                },
-                { label: "", kind: vscode.QuickPickItemKind.Separator },
-                {
-                    label: "$(timeline-unpin) Click to change Ollama model",
-                    action: "changeModel",
-                },
-                { label: "", kind: vscode.QuickPickItemKind.Separator },
-                {
-                    label: "$(gear) Click to open settings",
-                    action: "settings",
-                },
-            ];
+        quickPick.onDidHide(() => quickPick.dispose());
+        quickPick.show();
+    }
 
-            const quickPick = vscode.window.createQuickPick<MenuItem>();
-            quickPick.items = items;
-            quickPick.title = "🦙 Autopilot";
-            quickPick.placeholder = "Select an action";
-
-            quickPick.onDidAccept(() => {
-                const selection = quickPick.selectedItems[0];
-                quickPick.hide();
-
-                if (selection?.action === "toggle") {
-                    if (this.configHandler.autopilotEnabled) {
-                        vscode.commands.executeCommand("ollama-autopilot.disable");
-                    }
-                    else {
-                        vscode.commands.executeCommand("ollama-autopilot.enable");
-                    }
-                } else if (selection?.action === "changeModel") {
-                    vscode.commands.executeCommand("ollama-autopilot.changeModel");
-                } else if (selection?.action === "settings") {
-                    vscode.commands.executeCommand(
-                        "workbench.action.openSettings",
-                        "ollama-autopilot",
-                    );
-                }
-            });
-
-            quickPick.onDidHide(() => quickPick.dispose());
-            quickPick.show();
+    private executeAction(action: string): void {
+    switch (action) {
+        case MenuItemAction.Toggle:
+            if (this.configHandler.autopilotEnabled) {
+                vscode.commands.executeCommand("ollama-autopilot.disable");
+            } else {
+                vscode.commands.executeCommand("ollama-autopilot.enable");
+            }
+            break;
+        case MenuItemAction.ChangeModel:
+            vscode.commands.executeCommand("ollama-autopilot.changeModel");
+            break;
+        case MenuItemAction.Settings:
+            vscode.commands.executeCommand("workbench.action.openSettings", "ollama-autopilot");
+            break;
+        }
     }
 }
