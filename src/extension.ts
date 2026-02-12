@@ -4,6 +4,8 @@ import { GuiHandler } from "./guiHandler";
 //import { OllamaClient } from "./ollamaClient";
 //import { AutopilotProvider } from "./autopilotProvider";
 
+let snoozeTimer: NodeJS.Timeout | undefined;
+
 
 export function activate(context: vscode.ExtensionContext) {
 	const configHandler = new ConfigHandler();
@@ -18,13 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
             guiHandler.showMenu();
         }),
     );
-	
-	context.subscriptions.push(
-        vscode.commands.registerCommand("ollama-autopilot.selectModel", () => {
-            
-        }),
-    );
-	
+		
 	context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.enable", () => {
             configHandler.setAutopilotEnabledState(true);
@@ -38,6 +34,25 @@ export function activate(context: vscode.ExtensionContext) {
 			guiHandler.indicateAutopilotDisabled();
         }),
     );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("ollama-autopilot.snooze", () => {
+            snoozeAutopilot(configHandler, guiHandler);
+        }),
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("ollama-autopilot.selectModel", () => {
+            
+        }),
+    );
 }
 
 export function deactivate() {}
+
+async function snoozeAutopilot(configHandler: ConfigHandler, guiHandler: GuiHandler): Promise<void> {
+    vscode.commands.executeCommand("ollama-autopilot.disable");
+    snoozeTimer = setTimeout(async () => {
+        vscode.commands.executeCommand("ollama-autopilot.enable");
+    }, configHandler.snoozeTimeMin * 60 * 1000);
+}

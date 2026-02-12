@@ -18,16 +18,20 @@
         "title": "Ollama Autopilot: Show Menu"
       },
       {
-        "command": "ollama-autopilot.selectModel",
-        "title": "Ollama Autopilot: Select Model"
-      },
-      {
         "command": "ollama-autopilot.enable",
         "title": "Ollama Autopilot: Enable"
       },
       {
         "command": "ollama-autopilot.disable",
         "title": "Ollama Autopilot: Disable"
+      },
+      {
+        "command": "ollama-autopilot.snooze",
+        "title": "Ollama Autopilot: Snooze"
+      },
+      {
+        "command": "ollama-autopilot.selectModel",
+        "title": "Ollama Autopilot: Select Model"
       }
     ],
     "configuration": {
