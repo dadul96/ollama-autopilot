@@ -76,4 +76,15 @@ export class ConfigHandler implements vscode.Disposable {
     get promptText() { return this._promptText; }
     get textBeforeCursorSize() { return this._textBeforeCursorSize; }
     get textAfterCursorSize() { return this._textAfterCursorSize; }
+
+    public async setAutopilotEnabledState(state: boolean): Promise<void> {
+        const config = vscode.workspace.getConfiguration("ollama-autopilot");
+        await config.update(
+            "general.autopilotEnabled", 
+            state, 
+            vscode.ConfigurationTarget.Global, 
+            undefined
+        );
+    }
+
 }

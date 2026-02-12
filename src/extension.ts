@@ -27,28 +27,14 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.enable", () => {
-			// for testing only - later use the configHandler for this:
-            const config = vscode.workspace.getConfiguration("ollama-autopilot");
-            config.update(
-                "general.autopilotEnabled",
-                true,
-                vscode.ConfigurationTarget.Global,
-            );
-
+            configHandler.setAutopilotEnabledState(true);
 			guiHandler.indicateOllamaEnabled();
         }),
     );
 	
 	context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.disable", () => {
-			// for testing only - later use the configHandler for this:
-			const config = vscode.workspace.getConfiguration("ollama-autopilot");
-            config.update(
-                "general.autopilotEnabled",
-                false,
-                vscode.ConfigurationTarget.Global,
-            );
-
+			configHandler.setAutopilotEnabledState(false);
 			guiHandler.indicateAutopilotDisabled();
         }),
     );
