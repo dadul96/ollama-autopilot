@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.snooze", () => {
-            snoozeAutopilot(configHandler, guiHandler);
+            snoozeAutopilot(configHandler);
         }),
     );
 
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-async function snoozeAutopilot(configHandler: ConfigHandler, guiHandler: GuiHandler): Promise<void> {
+async function snoozeAutopilot(configHandler: ConfigHandler): Promise<void> { //TODO: make this part of autopilotHandler
     vscode.commands.executeCommand("ollama-autopilot.disable");
     setTimeout(async () => {
         vscode.commands.executeCommand("ollama-autopilot.enable");
