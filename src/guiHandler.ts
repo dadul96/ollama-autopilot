@@ -64,6 +64,45 @@ export class GuiHandler {
         );
     }
 
+    public showOllamaNotAvailableError() {
+        vscode.window.showErrorMessage(
+                "Failed to connect to Ollama server. Please ensure Ollama is running on your system and check your configuration settings.",
+                ActionItems.Settings,
+            )
+            .then((selection) => {
+                if (selection === ActionItems.Settings) {
+                    this.executeAction(ActionItems.Settings);
+                }
+            });
+    }
+
+    public showNoModelsError() {
+        vscode.window.showErrorMessage(
+                "No Ollama models found. Please pull a model using 'ollama pull <model>'.",
+            );
+    }
+
+    public showWrongModelSelectedError() {
+        vscode.window.showWarningMessage(
+                `Completion model "${this.configHandler.modelName}" not found.`,
+                ActionItems.SelectModel
+            )
+            .then((selection) => {
+                if (selection === ActionItems.SelectModel) {
+                    this.executeAction(ActionItems.SelectModel);
+                }
+            });
+    }
+
+    public async showModelSelector(availableModels: string[]): Promise<void> {
+        const selected = await vscode.window.showQuickPick(availableModels, {
+            placeHolder: "Select model",
+        });
+        if (selected) {
+            await this.configHandler.setModelName(selected);
+        }
+    }
+
     public showMenu() {
         const quickPick = vscode.window.createQuickPick<MenuItem>();
         const items: MenuItem[] = [

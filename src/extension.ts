@@ -1,16 +1,14 @@
 import * as vscode from 'vscode';
 import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
-//import { OllamaClient } from "./ollamaClient";
+import { OllamaClient } from "./ollamaClient";
 //import { AutopilotProvider } from "./autopilotProvider";
 
 
-
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 	const configHandler = new ConfigHandler();
 	const guiHandler = new GuiHandler(context, configHandler);
-	
-	//const ollamaClient = new OllamaClient(configHandler);
+    const ollamaClient = new OllamaClient(configHandler, guiHandler);
 	//const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler);
 
 
@@ -42,9 +40,16 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.selectModel", () => {
-            
+            ollamaClient.selectModelAndPreload();
         }),
     );
+
+    if (await ollamaClient.checkOllamaAvailable()) {
+        if (await ollamaClient.loadAndValidateModels()) {
+            ollamaClient.preloadModel();
+        }
+    }
+
 }
 
 export function deactivate() {}
