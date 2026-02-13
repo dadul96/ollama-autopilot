@@ -87,4 +87,14 @@ export class ConfigHandler implements vscode.Disposable {
         );
     }
 
+    public async setModelName(modelName: string): Promise<void> {
+        const config = vscode.workspace.getConfiguration("ollama-autopilot");
+        await config.update(
+            "model.modelName", 
+            modelName, 
+            vscode.ConfigurationTarget.Global, 
+            undefined
+        );
+    }
+
 }
