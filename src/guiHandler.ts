@@ -6,11 +6,11 @@ interface MenuItem extends vscode.QuickPickItem {
     action?: string;
 }
 
-enum MenuItemAction {
-    Toggle = "toggle",
-    Snooze = "snooze",
-    ChangeModel = "changeModel",
-    Settings = "settings"
+enum ActionItems {
+    Toggle = "Toggle",
+    Snooze = "Snooze",
+    SelectModel = "Select Model",
+    Settings = "Settings"
 }
 
 export class GuiHandler {
@@ -71,28 +71,28 @@ export class GuiHandler {
                 label: this.configHandler.autopilotEnabled
                     ? `$(debug-stop) Click to disable Ollama Autopilot`
                     : `$(debug-start) Click to enable Ollama Autopilot`,
-                action: MenuItemAction.Toggle,
+                action: ActionItems.Toggle,
             },
             
             { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
 
             {
                 label: `$(debug-pause) Snooze Autopilot for ${this.configHandler.snoozeTimeMin} minutes`,
-                action: MenuItemAction.Snooze,
+                action: ActionItems.Snooze,
             },
 
             { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
 
             {
-                label: `$(timeline-unpin) Click to change Ollama model`,
-                action: MenuItemAction.ChangeModel,
+                label: `$(timeline-unpin) Click to select Ollama model`,
+                action: ActionItems.SelectModel,
             },
 
             { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
             
             {
                 label: `$(gear) Click to open settings`,
-                action: MenuItemAction.Settings,
+                action: ActionItems.Settings,
             },
         ];
         quickPick.items = items;
@@ -115,7 +115,7 @@ export class GuiHandler {
     private executeAction(action: string): void {
         let infoMessage: string;
         switch (action) {
-            case MenuItemAction.Toggle:
+            case ActionItems.Toggle:
                 if (this.configHandler.autopilotEnabled) {
                     vscode.commands.executeCommand("ollama-autopilot.disable");
                     infoMessage = `Autopilot disabled`;
@@ -127,7 +127,7 @@ export class GuiHandler {
                     infoMessage,
                 );
                 break;
-            case MenuItemAction.Snooze:
+            case ActionItems.Snooze:
                 if (this.configHandler.autopilotEnabled) {
                     vscode.commands.executeCommand("ollama-autopilot.snooze");
                     infoMessage = `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`;
@@ -138,10 +138,10 @@ export class GuiHandler {
                     infoMessage,
                 );
                 break;
-            case MenuItemAction.ChangeModel:
-                vscode.commands.executeCommand("ollama-autopilot.changeModel");
+            case ActionItems.SelectModel:
+                vscode.commands.executeCommand("ollama-autopilot.selectModel");
                 break;
-            case MenuItemAction.Settings:
+            case ActionItems.Settings:
                 vscode.commands.executeCommand("workbench.action.openSettings", "ollama-autopilot");
                 break;
             }
