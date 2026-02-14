@@ -46,7 +46,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     if (await ollamaClient.checkOllamaAvailable()) {
         if (await ollamaClient.loadAndValidateModels()) {
-            ollamaClient.preloadModel();
+            await ollamaClient.preloadModel();
         }
     }
 
