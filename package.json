@@ -108,7 +108,7 @@
           "type": "string",
           "editPresentation": "multilineText",
           "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n\nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n\nExisting code: \n${textBeforeCursor}",
-          "description": "Prompt text. You can use the following template literals in your prompt: ${projectName}, ${fileName}, ${languageId}, ${textBeforeCursor}, ${textAfterCursor}",
+          "description": "Prompt text. You can use the following template literals in your prompt: ${workspaceName}, ${fileName}, ${languageId}, ${textBeforeCursor}, ${textAfterCursor}",
           "order": 12
         }
       }
