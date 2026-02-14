@@ -2,14 +2,14 @@ import * as vscode from 'vscode';
 import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
 import { OllamaClient } from "./ollamaClient";
-//import { AutopilotProvider } from "./autopilotProvider";
+import { AutopilotProvider } from "./autopilotProvider";
 
 
 export async function activate(context: vscode.ExtensionContext) {
 	const configHandler = new ConfigHandler();
 	const guiHandler = new GuiHandler(context, configHandler);
     const ollamaClient = new OllamaClient(configHandler, guiHandler);
-	//const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler);
+	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler);
 
 
     context.subscriptions.push(
@@ -34,7 +34,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.snooze", () => {
-            snoozeAutopilot(configHandler);
+            autopilotProvider.snoozeAutopilot();
         }),
     );
 
@@ -50,13 +50,12 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
+    context.subscriptions.push(
+        vscode.languages.registerInlineCompletionItemProvider(
+            { pattern: "**" },
+            autopilotProvider,
+        ),
+    );
 }
 
 export function deactivate() {}
-
-async function snoozeAutopilot(configHandler: ConfigHandler): Promise<void> { //TODO: make this part of autopilotHandler
-    vscode.commands.executeCommand("ollama-autopilot.disable");
-    setTimeout(async () => {
-        vscode.commands.executeCommand("ollama-autopilot.enable");
-    }, configHandler.snoozeTimeMin * 60 * 1000);
-}
