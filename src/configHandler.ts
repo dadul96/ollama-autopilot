@@ -53,7 +53,6 @@ export class ConfigHandler implements vscode.Disposable {
         this._modelName = this.getRequired<string>("model.modelName");
         this._maxAutocompleteTokens = this.getRequired<number>("model.maxAutocompleteTokens");
         this._temperature = this.getRequired<number>("model.temperature");
-        this._reasoningEffort = this.getRequired<string>("model.reasoningEffort");
         this._modelKeepAliveTimeMin = this.getRequired<number>("model.modelKeepAliveTimeMin");
         this._promptText = this.getRequired<string>("prompt.promptText");
         this._textBeforeCursorSize = this.getRequired<number>("prompt.textBeforeCursorSize");

@@ -7,6 +7,7 @@ export interface OllamaRequest {
     prompt?: string;
     keep_alive?: string;
     stream?: boolean;
+    think?: boolean;
     options?: {
         temperature?: number;
         num_predict?: number;
@@ -82,6 +83,8 @@ export class OllamaClient {
                 },
                 body: JSON.stringify({
                     ...request,
+                    stream: false,
+                    think: false,
                 }),
                 signal,
             });

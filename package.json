@@ -79,13 +79,6 @@
           "description": "Model temperature (typical range 0-0.4)",
           "order": 7
         },
-        "ollama-autopilot.model.reasoningEffort": {
-          "type": "string",
-          "default": "not specified",
-          "enum": [ "not specified", "low", "medium", "high" ],
-          "description": "Model's reasoning effort",
-          "order": 8
-        },
           "ollama-autopilot.model.modelKeepAliveTimeMin": {
           "type": "number",
           "default": 10,
