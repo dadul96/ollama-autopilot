@@ -54,7 +54,7 @@ export class OllamaClient {
         }
     }
     
-    private async listModels(): Promise<string[]> {
+    private async getModels(): Promise<string[]> {
         try {
             const response = await fetch(`${this.configHandler.baseUrl}/api/tags`, {
                 method: "GET",
@@ -118,7 +118,7 @@ export class OllamaClient {
 
     public async loadAndValidateModels(): Promise<boolean> {
         try {
-            this.availableModels = (await this.listModels()).map((model) =>
+            this.availableModels = (await this.getModels()).map((model) =>
                 model.replace(":latest", ""),
             );
 
