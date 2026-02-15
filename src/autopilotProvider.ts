@@ -80,7 +80,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         return promptText;
     }
 
-    private cleanResponseString(response: string): string {
+    private cleanResponseString(responseString: string): string {
         /**
          * Removes surrounding Markdown triple-backtick fences from a response.
          *
@@ -91,12 +91,12 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
          * - Removes closing fence even if opening fence is missing
          */
 
-        if (!response) {
+        if (!responseString) {
             return '';
         }
 
         // trim whitespace that is clearly outside the code block:
-        const trimmed = response.trim();
+        const trimmedString = responseString.trim();
 
         /**
          * Remove opening fence, if present
@@ -106,7 +106,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
          * [^\r\n]*       – optional language specifier (any characters except newline)
          * \r?\n          – newline (supports both \n and \r\n)
          */
-        const withoutOpen = trimmed.replace(/^```[^\r\n]*\r?\n/, '');
+        const withoutOpenString = trimmedString.replace(/^```[^\r\n]*\r?\n/, '');
 
         /**
          * Remove closing fence, if present
@@ -116,10 +116,10 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
          * [ \t]*         – optional trailing spaces or tabs
          * $              – end of string
          */
-        const withoutClose = withoutOpen.replace(/\r?\n```[ \t]*$/, '');
+        const withoutCloseString = withoutOpenString.replace(/\r?\n```[ \t]*$/, '');
 
         // final trim to remove any leftover whitespace before return:
-        return withoutClose.trim();
+        return withoutCloseString.trim();
     }
 
     private debounce(delay: number, token: vscode.CancellationToken): Promise<void> {
@@ -187,7 +187,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             const num_predict = this.configHandler.maxAutocompleteTokens;
             const stop = ["\n\n", "```"];
 
-            const response = await this.ollamaClient.generateResponse(
+            const responseString = await this.ollamaClient.generateResponse(
                 {
                     model,
                     prompt,
@@ -204,7 +204,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                 return undefined;
             }
 
-            const cleanedCodeCompletion = this.cleanResponseString(response);
+            const cleanedCodeCompletion = this.cleanResponseString(responseString);
 
             if (!cleanedCodeCompletion) {
                 return undefined;
