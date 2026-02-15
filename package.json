@@ -51,7 +51,7 @@
         },
         "ollama-autopilot.general.autocompleteDelayMs": {
           "type": "number",
-          "default": 500,
+          "default": 200,
           "description": "Delay in milliseconds before triggering autocomplete",
           "order": 3
         },
