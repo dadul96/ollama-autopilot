@@ -47,6 +47,7 @@ export class OllamaClient {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                signal: AbortSignal.timeout(10000)
             });
             return response.ok;
         } catch {
@@ -61,6 +62,7 @@ export class OllamaClient {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                signal: AbortSignal.timeout(10000)
             });
             
             if (!response.ok) {
