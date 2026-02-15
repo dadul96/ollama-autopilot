@@ -17,16 +17,16 @@ export class ConfigHandler implements vscode.Disposable {
     private _textBeforeCursorSize!: number;
     private _textAfterCursorSize!: number;
 
-    private _onDidChange = new vscode.EventEmitter<void>();
-    public readonly onDidChange = this._onDidChange.event;
+    private _onConfigDidChange = new vscode.EventEmitter<void>();
+    public readonly onConfigDidChange = this._onConfigDidChange.event;
 
     constructor() {
         this.loadConfig();
-
+    
         this._disposable = vscode.workspace.onDidChangeConfiguration(e => {
             if (e.affectsConfiguration("ollama-autopilot")) {
                 this.loadConfig();
-                this._onDidChange.fire();
+                this._onConfigDidChange.fire();
             }
         });
     }
