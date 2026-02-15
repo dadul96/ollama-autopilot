@@ -81,7 +81,7 @@ export class ConfigHandler implements vscode.Disposable {
         await config.update(
             "general.autopilotEnabled", 
             state, 
-            vscode.ConfigurationTarget.Global, 
+            vscode.ConfigurationTarget.Workspace, 
             undefined
         );
     }
@@ -91,7 +91,7 @@ export class ConfigHandler implements vscode.Disposable {
         await config.update(
             "model.modelName", 
             modelName, 
-            vscode.ConfigurationTarget.Global, 
+            vscode.ConfigurationTarget.Workspace, 
             undefined
         );
     }
