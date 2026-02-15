@@ -80,35 +80,43 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
 
     private cleanResponseString(response: string): string {
         /**
-         * Remove surrounding Markdown code fences (``` … ```) from a response.
-         * Works with any language specifier, handles both Unix and Windows line endings.
+         * Removes surrounding Markdown triple-backtick fences from a response.
+         *
+         * - Supports optional language specifier (```ts, ```javascript, etc.)
+         * - Supports Unix (\n) and Windows (\r\n) line endings
+         * - Only removes fences if they appear at the very start and end
+         * - Removes opening fence even if closing fence is missing
+         * - Removes closing fence even if opening fence is missing
          */
-        // Trim leading/trailing whitespace that isn’t part of the code block.
+
+        if (!response) {
+            return '';
+        }
+
+        // Trim whitespace that is clearly outside the code block.
         const trimmed = response.trim();
 
-        /* Remove opening fence, if present
-        * ^          – match at the start of the string
-        * ```        – three backticks
-        * [\S]*      – optional language specifier (anything but whitespace)
-        * \s*\n      – optional trailing spaces, then the newline that ends the fence:
-        *              - \s* consumes a CR (if the file uses CRLF) and any spaces/tabs
-        *              - \n matches the line‑feed (LF) that follows the CR
-        */
-        const withoutOpen = trimmed.replace(/^```[\S]*\s*\n/, '');
+        /**
+         * Remove opening fence, if present
+         *
+         * ^              – match at start of string
+         * ```            – three literal backticks
+         * [^\r\n]*       – optional language specifier (any characters except newline)
+         * \r?\n          – newline (supports both \n and \r\n)
+         */
+        const withoutOpen = trimmed.replace(/^```[^\r\n]*\r?\n/, '');
 
-        /* Remove closing fence, if present
-        * \n         – newline that precedes the closing fence
-        * ```        – three backticks
-        * [ \t]*     – optional trailing spaces/tabs
-        * $          – end of the string
-        * i          – case‑insensitive (in case someone writes “```JS” etc.)_
-        *              - \n matches the LF of a CRLF sequence
-        *              - the preceding CR (if present) stays in the result
-        *                (you can trim again afterwards if you need to drop it)
-        */
-        const withoutClose = withoutOpen.replace(/\n```[ \t]*$/i, '');
+        /**
+         * Remove closing fence, if present
+         *
+         * \r?\n          – newline before the closing fence
+         * ```            – three literal backticks
+         * [ \t]*         – optional trailing spaces or tabs
+         * $              – end of string
+         */
+        const withoutClose = withoutOpen.replace(/\r?\n```[ \t]*$/, '');
 
-        // Final trim before return, to also drop CR if present
+        // Final trim to remove any leftover whitespace
         return withoutClose.trim();
     }
 
