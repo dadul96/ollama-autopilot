@@ -104,7 +104,7 @@ export class OllamaClient {
         }
     }
 
-    public async checkOllamaAvailable(): Promise<boolean> {
+    private async checkOllamaAvailable(): Promise<boolean> {
         if (await this.pingOllama()) {
             this.guiHandler.indicateOllamaEnabled();
             return true;
@@ -116,23 +116,31 @@ export class OllamaClient {
         }
     }
 
-    public async loadAndValidateModels(): Promise<boolean> {
+    private async listAvailableModels(): Promise<boolean> {
         try {
             this.availableModels = (await this.getModels()).map((model) =>
                 model.replace(":latest", ""),
             );
-
             if (this.availableModels.length === 0) {
                 this.guiHandler.indicateNoValidModelSelected();
                 this.guiHandler.showNoModelsError();
                 return false;
-            }
+            }            
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    private async validateSelectedModel(): Promise<boolean> {
+        try {
+            await this.listAvailableModels();
 
             if (!this.availableModels.includes(this.configHandler.modelName)) {
+                this.guiHandler.indicateNoValidModelSelected();
                 this.guiHandler.showWrongModelSelectedError();
                 return false;
             }
-            
             return true;
 
         } catch (error) {
@@ -140,12 +148,7 @@ export class OllamaClient {
         }
     }
 
-    public async selectModelAndPreload() {
-        await this.guiHandler.showModelSelector(this.availableModels);
-        this.preloadModel();
-    }
-
-    public async preloadModel(): Promise<void> {
+    private async preloadModel(): Promise<void> {
         const request: OllamaRequest = {
             model: this.configHandler.modelName, 
             keep_alive: `${this.configHandler.modelKeepAliveTimeMin}m`
@@ -153,6 +156,23 @@ export class OllamaClient {
         this.request(request);
     }
     
+    public async initialization() {
+        if (await this.checkOllamaAvailable()) {
+            if (await this.validateSelectedModel()) {
+                await this.preloadModel();
+            }
+        }
+    }
+
+    public async selectModelAndPreload() {
+        if (await this.checkOllamaAvailable()) {
+            if (await this.listAvailableModels()) {
+                await this.guiHandler.showModelSelector(this.availableModels);
+                await this.preloadModel();
+            }
+        }
+    }
+
     public async generateResponse(request: OllamaRequest, signal?: AbortSignal): Promise<string> {
         request.keep_alive = `${this.configHandler.modelKeepAliveTimeMin}m`;
         request.stream = false;

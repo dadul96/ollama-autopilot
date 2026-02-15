@@ -21,14 +21,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.enable", () => {
             configHandler.setAutopilotEnabledState(true);
-			guiHandler.indicateOllamaEnabled();
         }),
     );
 	
 	context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.disable", () => {
 			configHandler.setAutopilotEnabledState(false);
-			guiHandler.indicateAutopilotDisabled();
         }),
     );
 
@@ -44,12 +42,13 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
     );
 
-    if (await ollamaClient.checkOllamaAvailable()) {
-        if (await ollamaClient.loadAndValidateModels()) {
-            await ollamaClient.preloadModel();
-        }
-    }
+    // run initializeAccordingToConfig once at startup:
+    initializeAccordingToConfig(configHandler, guiHandler, ollamaClient);
 
+    // re-run initializeAccordingToConfig on every config change:
+    configHandler.onConfigDidChange(() => initializeAccordingToConfig(configHandler, guiHandler, ollamaClient));
+
+    // register inline completion provider:
     context.subscriptions.push(
         vscode.languages.registerInlineCompletionItemProvider(
             { pattern: "**" },
@@ -59,3 +58,12 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
+
+async function initializeAccordingToConfig(configHandler: ConfigHandler, guiHandler: GuiHandler, ollamaClient: OllamaClient) {
+    if (!configHandler.autopilotEnabled) {
+        guiHandler.indicateAutopilotDisabled();
+    } else {
+        guiHandler.indicateOllamaEnabled();
+        await ollamaClient.initialization();
+    }
+}
