@@ -7,6 +7,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     private ollamaClient: OllamaClient;
     private configHandler: ConfigHandler;
     private abortController?: AbortController;
+    private debounceTimer?: NodeJS.Timeout;
 
     constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler) {
         this.ollamaClient = ollamaClient;
@@ -120,6 +121,26 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         return withoutClose.trim();
     }
 
+    private debounce(delay: number, token: vscode.CancellationToken): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (token.isCancellationRequested) {
+                return reject(new Error("Cancelled before debounce"));
+            }
+
+            this.debounceTimer = setTimeout(() => {
+                resolve();
+            }, delay);
+
+            token.onCancellationRequested(() => {
+                if (this.debounceTimer) {
+                    clearTimeout(this.debounceTimer);
+                    this.debounceTimer = undefined;
+                }
+                reject(new Error("Cancelled during debounce"));
+            });
+        });
+    }
+
     public async snoozeAutopilot(): Promise<void> {
         vscode.commands.executeCommand("ollama-autopilot.disable");
         setTimeout(async () => {
@@ -137,17 +158,24 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             return undefined;
         }
 
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = undefined;
+        }
+
         if (this.abortController) {
             this.abortController.abort();
             this.abortController = undefined;
         }
         this.abortController = new AbortController();
 
-        if (token.isCancellationRequested) {
-            return undefined;
-        }
-
         try {
+            await this.debounce(this.configHandler.autocompleteDelayMs, token);
+
+            if (token.isCancellationRequested) {
+                return undefined;
+            }
+
             const model = this.configHandler.modelName;
             const prompt = this.createPromptString(document, cursorPosition);
             const temperature = this.configHandler.temperature;
