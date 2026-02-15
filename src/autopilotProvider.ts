@@ -94,7 +94,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             return '';
         }
 
-        // Trim whitespace that is clearly outside the code block.
+        // trim whitespace that is clearly outside the code block:
         const trimmed = response.trim();
 
         /**
@@ -117,7 +117,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
          */
         const withoutClose = withoutOpen.replace(/\r?\n```[ \t]*$/, '');
 
-        // Final trim to remove any leftover whitespace
+        // final trim to remove any leftover whitespace before return:
         return withoutClose.trim();
     }
 
