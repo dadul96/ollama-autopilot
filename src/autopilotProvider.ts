@@ -8,6 +8,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     private configHandler: ConfigHandler;
     private abortController?: AbortController;
     private debounceTimer?: NodeJS.Timeout;
+    private snoozeTimeout?: NodeJS.Timeout;
 
     constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler) {
         this.ollamaClient = ollamaClient;
@@ -143,8 +144,12 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
 
     public async snoozeAutopilot(): Promise<void> {
         vscode.commands.executeCommand("ollama-autopilot.disable");
-        setTimeout(async () => {
+        if (this.snoozeTimeout) {
+            clearTimeout(this.snoozeTimeout);
+        }
+        this.snoozeTimeout = setTimeout(async () => {
             vscode.commands.executeCommand("ollama-autopilot.enable");
+            this.snoozeTimeout = undefined;
         }, this.configHandler.snoozeTimeMin * 60 * 1000);
     }
 
