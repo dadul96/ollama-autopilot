@@ -157,14 +157,9 @@ export class GuiHandler {
             case ActionItems.Toggle:
                 if (this.configHandler.autopilotEnabled) {
                     vscode.commands.executeCommand("ollama-autopilot.disable");
-                    infoMessage = `Autopilot disabled`;
                 } else {
                     vscode.commands.executeCommand("ollama-autopilot.enable");
-                    infoMessage = `Autopilot enabled`;
                 }
-                vscode.window.showInformationMessage(
-                    infoMessage,
-                );
                 break;
             case ActionItems.Snooze:
                 if (this.configHandler.autopilotEnabled) {
