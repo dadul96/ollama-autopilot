@@ -152,7 +152,6 @@ export class GuiHandler {
     }
 
     private executeAction(action: string): void {
-        let infoMessage: string;
         switch (action) {
             case ActionItems.Toggle:
                 if (this.configHandler.autopilotEnabled) {
@@ -164,13 +163,10 @@ export class GuiHandler {
             case ActionItems.Snooze:
                 if (this.configHandler.autopilotEnabled) {
                     vscode.commands.executeCommand("ollama-autopilot.snooze");
-                    infoMessage = `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`;
-                } else {
-                    infoMessage = `Autopilot not active - no need to snooze`;
+                    vscode.window.showInformationMessage(
+                        `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`
+                    );
                 }
-                vscode.window.showInformationMessage(
-                    infoMessage,
-                );
                 break;
             case ActionItems.SelectModel:
                 vscode.commands.executeCommand("ollama-autopilot.selectModel");
