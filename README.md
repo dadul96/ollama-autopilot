@@ -98,6 +98,22 @@ This edge case does not affect normal usage and will be addressed in a future up
 - No cloud services
 - All completions are generated locally
 
+## 🚀 Performance Notes
+Ollama Autopilot runs entirely locally. Performance depends heavily on:
+- Model size
+- Hardware (CPU / GPU)
+- Available RAM
+- Context size configuration
+    
+Larger models (e.g., 16B+) may introduce noticeable latency before inline suggestions appear, especially on CPU-only systems.
+
+#### Tips for Better Performance
+- Use smaller models (e.g., 7B variants)
+- Reduce `textBeforeCursorSize`
+- Reduce `textBeforeCursorSize` to `0` and don't use in prompt
+- Lower `maxAutocompleteTokens`
+- Ensure Ollama is running with GPU acceleration if available
+
 ## 📌 Release Notes
 ### 1.0.0
 Initial release
