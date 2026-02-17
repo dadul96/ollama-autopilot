@@ -1,18 +1,20 @@
 import * as vscode from "vscode";
 import { OllamaClient } from "./ollamaClient";
 import { ConfigHandler } from "./configHandler";
-
+import { GuiHandler } from "./guiHandler";
 
 export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     private ollamaClient: OllamaClient;
     private configHandler: ConfigHandler;
+    private guiHandler: GuiHandler;
     private abortController?: AbortController;
     private debounceTimer?: NodeJS.Timeout;
     private snoozeTimeout?: NodeJS.Timeout;
 
-    constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler) {
+    constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler, guiHandler: GuiHandler) {
         this.ollamaClient = ollamaClient;
         this.configHandler = configHandler;
+        this.guiHandler = guiHandler;
     }
 
     private getTextBeforeCursor(document: vscode.TextDocument, cursorPosition: vscode.Position): string {
@@ -143,14 +145,17 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     }
 
     public async snoozeAutopilot(): Promise<void> {
-        vscode.commands.executeCommand("ollama-autopilot.disable");
-        if (this.snoozeTimeout) {
-            clearTimeout(this.snoozeTimeout);
+        if (this.configHandler.autopilotEnabled) {
+            this.guiHandler.showSnoozeMessage();
+            vscode.commands.executeCommand("ollama-autopilot.disable");
+            if (this.snoozeTimeout) {
+                clearTimeout(this.snoozeTimeout);
+            }
+            this.snoozeTimeout = setTimeout(async () => {
+                vscode.commands.executeCommand("ollama-autopilot.enable");
+                this.snoozeTimeout = undefined;
+            }, this.configHandler.snoozeTimeMin * 60 * 1000);
         }
-        this.snoozeTimeout = setTimeout(async () => {
-            vscode.commands.executeCommand("ollama-autopilot.enable");
-            this.snoozeTimeout = undefined;
-        }, this.configHandler.snoozeTimeMin * 60 * 1000);
     }
 
     public async provideInlineCompletionItems(

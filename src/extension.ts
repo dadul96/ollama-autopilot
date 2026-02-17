@@ -9,7 +9,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const configHandler = new ConfigHandler();
 	const guiHandler = new GuiHandler(context, configHandler);
     const ollamaClient = new OllamaClient(configHandler, guiHandler);
-	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler);
+	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler, guiHandler);
 
 
     context.subscriptions.push(

@@ -103,6 +103,12 @@ export class GuiHandler {
         }
     }
 
+    public async showSnoozeMessage() {
+        vscode.window.showInformationMessage(
+            `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`
+        );
+    }
+
     public showMenu() {
         const quickPick = vscode.window.createQuickPick<MenuItem>();
         const items: MenuItem[] = [
@@ -161,12 +167,7 @@ export class GuiHandler {
                 }
                 break;
             case ActionItems.Snooze:
-                if (this.configHandler.autopilotEnabled) {
-                    vscode.commands.executeCommand("ollama-autopilot.snooze");
-                    vscode.window.showInformationMessage(
-                        `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`
-                    );
-                }
+                vscode.commands.executeCommand("ollama-autopilot.snooze");
                 break;
             case ActionItems.SelectModel:
                 vscode.commands.executeCommand("ollama-autopilot.selectModel");
