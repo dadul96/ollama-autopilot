@@ -2,13 +2,32 @@
   "name": "ollama-autopilot",
   "displayName": "Ollama Autopilot",
   "description": "Local LLM inline code completion using Ollama.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.108.1"
   },
   "categories": [
+    "AI",
+    "Machine Learning",
+    "Data Science",
+    "Formatters",
+    "Programming Languages",
+    "Linters",
     "Other"
   ],
+  "keywords": [
+  "ollama",
+  "llama",
+  "gpt",
+  "llm",
+  "ai",
+  "autocomplete",
+  "inline completion",
+  "code completion",
+  "local ai",
+  "copilot alternative"
+  ],
+  "license": "MIT",
   "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
   "contributes": {
