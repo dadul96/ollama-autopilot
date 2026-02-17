@@ -106,7 +106,7 @@
         },
           "ollama-autopilot.prompt.textBeforeCursorSize": {
           "type": "number",
-          "default": 16384,
+          "default": 4096,
           "description": "Number of text characters before the cursor that should be considered (keep your models context size in mind)",
           "order": 10
         },
