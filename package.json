@@ -10,7 +10,7 @@
     "url": "https://github.com/dadul96/ollama-autopilot"  
   },  
   "engines": {
-    "vscode": "^1.108.1"
+    "vscode": "^1.85.0"
   },
   "categories": [
     "AI",
