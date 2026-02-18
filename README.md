@@ -1,9 +1,10 @@
-# Ollama Autopilot
+<h1 align="center"><img src="./images/ollama_autopilot_logo.png" height="64"><br>Ollama Autopilot</h1>
+
 **Local-only inline code completion for VS Code using Ollama.**  
 Ollama Autopilot provides intelligent inline code completion powered by local large language models (LLMs) via Ollama.  
 All completions run **fully locally on your machine** — no cloud, no API keys, no data leaving your system.
 
-![](/pictures/screenshot.gif)
+![](./images/screen_record.gif)
 
 ## ✨ Features
 #### 🦙 Fully Local LLM Autocomplete
