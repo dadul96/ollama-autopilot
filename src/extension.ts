@@ -11,6 +11,9 @@ export async function activate(context: vscode.ExtensionContext) {
     const ollamaClient = new OllamaClient(configHandler, guiHandler);
 	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler, guiHandler);
 
+    context.subscriptions.push(configHandler); 
+    context.subscriptions.push(guiHandler);
+    context.subscriptions.push(autopilotProvider);
 
     context.subscriptions.push(
         vscode.commands.registerCommand("ollama-autopilot.showMenu", () => {

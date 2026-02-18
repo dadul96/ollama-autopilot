@@ -17,6 +17,16 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         this.guiHandler = guiHandler;
     }
 
+    public dispose(): void {  
+        if (this.debounceTimer) {  
+            clearTimeout(this.debounceTimer);  
+        }  
+        if (this.snoozeTimeout) {  
+            clearTimeout(this.snoozeTimeout);  
+        }  
+        this.abortController?.abort();  
+    }  
+
     private getTextBeforeCursor(document: vscode.TextDocument, cursorPosition: vscode.Position): string {
         const textBeforeCursor = document.getText(
             new vscode.Range(document.lineAt(0).range.start, cursorPosition),

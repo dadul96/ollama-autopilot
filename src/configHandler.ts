@@ -31,6 +31,11 @@ export class ConfigHandler implements vscode.Disposable {
         });
     }
 
+    public dispose(): void {
+        this._disposable?.dispose();
+        this._onConfigDidChange?.dispose();
+    }
+
     private getRequired<T>(key: string): T {
         const value = this._config.get<T>(key);
 
@@ -57,10 +62,6 @@ export class ConfigHandler implements vscode.Disposable {
         this._promptText = this.getRequired<string>("prompt.promptText");
         this._textBeforeCursorSize = this.getRequired<number>("prompt.textBeforeCursorSize");
         this._textAfterCursorSize = this.getRequired<number>("prompt.textAfterCursorSize");
-    }
-
-    dispose(): void {
-        this._disposable?.dispose();
     }
 
     get autopilotEnabled() { return this._autopilotEnabled; }

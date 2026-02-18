@@ -36,6 +36,10 @@ export class GuiHandler {
         this.context.subscriptions.push(this.statusBarItem);
     }
 
+    public dispose(): void {  
+        this.statusBarItem?.dispose();  
+    }  
+
     public indicateOllamaNotAvailable() {
         this.statusBarItem.tooltip = "Ollama not available - Click for options";
         this.statusBarItem.backgroundColor = new vscode.ThemeColor(
