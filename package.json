@@ -5,6 +5,10 @@
   "icon": "images/ollama_autopilot_logo.png",
   "description": "Local LLM inline code completion using Ollama.",
   "version": "1.0.0",
+  "repository": {  
+    "type": "git",  
+    "url": "https://github.com/dadul96/ollama-autopilot"  
+  },  
   "engines": {
     "vscode": "^1.108.1"
   },
