@@ -54,7 +54,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // register inline completion provider:
     context.subscriptions.push(
         vscode.languages.registerInlineCompletionItemProvider(
-            { pattern: "**" },
+            { scheme: 'file', language: '*' },
             autopilotProvider,
         ),
     );
