@@ -75,7 +75,7 @@ ollama pull deepseek-coder-v2:16b
 ### Prompt
 | Setting | Description | Default |
 | --- | --- | --- |
-| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters before cursor to include | `16384` |
+| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters before cursor to include | `4096` |
 | `ollama-autopilot.prompt.textAfterCursorSize` | Characters after cursor to include | `0` |
 | `ollama-autopilot.prompt.promptText` | Prompt template | See default |
 
@@ -119,7 +119,7 @@ Larger models (e.g., 16B+) may introduce noticeable latency before inline sugges
 #### Tips for Better Performance
 - Use smaller models (e.g., 7B variants)
 - Reduce `textBeforeCursorSize`
-- Reduce `textBeforeCursorSize` to `0` and don't use in prompt
+- Reduce `textAfterCursorSize` to `0` and don't use in prompt
 - Lower `maxAutocompleteTokens`
 - Ensure Ollama is running with GPU acceleration if available
 
