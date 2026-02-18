@@ -86,8 +86,8 @@ export class OllamaClient {
                 },
                 body: JSON.stringify({
                     ...request,
-                    stream: false,
-                    think: false,
+                    stream: request.stream ?? false,
+                    think: request.think ?? false,
                 }),
                 signal,
             });
