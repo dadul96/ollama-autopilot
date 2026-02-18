@@ -181,5 +181,4 @@ export class OllamaClient {
         request.stream = false;
         return this.request(request);
     }
-
 }
