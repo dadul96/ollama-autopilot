@@ -2,6 +2,9 @@
   "name": "ollama-autopilot",
   "displayName": "Ollama Autopilot",
   "publisher": "dadul96",
+  "author": {
+	  "name": "dadul96"
+  },
   "icon": "images/ollama_autopilot_logo.png",
   "description": "Local LLM inline code completion using Ollama.",
   "version": "1.0.0",
