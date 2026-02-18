@@ -1,12 +1,12 @@
 {
   "name": "ollama-autopilot",
-  "displayName": "Ollama Autopilot",
+  "displayName": "Ollama Autopilot - Local LLM Autocomplete",
   "publisher": "dadul96",
   "author": {
 	  "name": "dadul96"
   },
   "icon": "images/ollama_autopilot_logo.png",
-  "description": "Local LLM inline code completion using Ollama.",
+  "description": "Local LLM code autocomplete for VS Code powered by Ollama. Inline AI code completion - fully offline, no API keys, no cloud.",
   "version": "1.0.0",
   "repository": {  
     "type": "git",  
@@ -21,15 +21,19 @@
   ],
   "keywords": [
   "ollama",
-  "llama",
-  "gpt",
-  "llm",
-  "ai",
-  "autocomplete",
-  "inline completion",
-  "code completion",
+  "ollama vscode",
+  "ollama autocomplete",
+  "local llm",
   "local ai",
-  "copilot alternative"
+  "offline ai",
+  "code completion",
+  "inline completion",
+  "copilot alternative",
+  "github copilot alternative",
+  "ai autocomplete",
+  "llm autocomplete",
+  "vs code ai",
+  "open source copilot"
   ],
   "license": "MIT",
   "activationEvents": ["onStartupFinished"],

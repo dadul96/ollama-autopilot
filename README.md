@@ -2,15 +2,22 @@
 
 <img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png" height="64">
 
-# Ollama Autopilot
+# Ollama Autopilot - Local LLM Autocomplete for VS Code
 [Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes)
 
 *** 
 </div>
 
-**Local-only inline code completion for VS Code using Ollama.**  
-Ollama Autopilot provides intelligent inline code completion powered by local large language models (LLMs) via Ollama.  
-All completions run **fully locally on your machine** — no cloud, no API keys, no data leaving your system.
+**Offline AI code completion for VS Code powered by Ollama.**
+
+Ollama Autopilot provides fast inline code autocomplete using local large language models (LLMs).  
+No API keys. No cloud. No data leaves your machine.
+
+Perfect for developers who want:
+- A GitHub Copilot alternative
+- Fully local AI coding
+- Privacy-focused autocomplete
+- Open-source AI tooling
 
 ![](https://github.com/dadul96/ollama-autopilot/blob/master/images/screen_record.gif)
 
