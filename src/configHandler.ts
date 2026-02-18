@@ -11,7 +11,6 @@ export class ConfigHandler implements vscode.Disposable {
     private _modelName!: string;
     private _maxAutocompleteTokens!: number;
     private _temperature!: number;
-    private _reasoningEffort!: string;
     private _modelKeepAliveTimeMin!: number;
     private _promptText!: string;
     private _textBeforeCursorSize!: number;
@@ -71,7 +70,6 @@ export class ConfigHandler implements vscode.Disposable {
     get modelName() { return this._modelName; }
     get maxAutocompleteTokens() { return this._maxAutocompleteTokens; }
     get temperature() { return this._temperature; }
-    get reasoningEffort() { return this._reasoningEffort; }
     get modelKeepAliveTimeMin() { return this._modelKeepAliveTimeMin; }
     get promptText() { return this._promptText; }
     get textBeforeCursorSize() { return this._textBeforeCursorSize; }
