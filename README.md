@@ -1,4 +1,12 @@
-<h1 align="center"><img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png" height="64"><br>Ollama Autopilot</h1>
+<div align="center">
+
+<img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png" height="64">
+
+# Ollama Autopilot
+[Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes)
+
+*** 
+</div>
 
 **Local-only inline code completion for VS Code using Ollama.**  
 Ollama Autopilot provides intelligent inline code completion powered by local large language models (LLMs) via Ollama.  
