@@ -31,6 +31,7 @@ export interface OllamaTagsResponse {
 }
 
 export class OllamaClient {
+    private readonly DEFAULT_TIMEOUT_MS = 10000;
     private configHandler: ConfigHandler;
     private guiHandler: GuiHandler;
     private availableModels: string[] = [];
@@ -47,7 +48,7 @@ export class OllamaClient {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                signal: AbortSignal.timeout(10000)
+                signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT_MS)
             });
             return response.ok;
         } catch {
@@ -62,7 +63,7 @@ export class OllamaClient {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                signal: AbortSignal.timeout(10000)
+                signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT_MS)
             });
             
             if (!response.ok) {
