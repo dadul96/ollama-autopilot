@@ -10,7 +10,7 @@
 
 **Offline AI code completion for VS Code powered by Ollama.**
 
-Ollama Autopilot provides fast inline code autocomplete using local large language models (LLMs).  
+Ollama Autopilot provides fast inline code autocomplete using local large language models (LLMs).
 No API keys. No cloud. No data leaves your machine.
 
 Perfect for developers who want:
@@ -35,7 +35,7 @@ You have full control over the completion behavior via a configurable prompt tem
 - `${languageId}`
 - `${textBeforeCursor}`
 - `${textAfterCursor}`
-    
+
 The default prompt is optimized for short, style-matching inline completions.
 
 #### 🔁 Model Selection
@@ -49,14 +49,14 @@ Clear status feedback:
 - Enabled
 - Disabled
 - Snoozed
-    
+
 Access the menu directly from the status bar.
 
 ## 📦 Requirements
 Before using this extension:
-1.  Install Ollama
-2.  Ensure Ollama is running
-3.  Pull at least one model like for example:
+1. Install Ollama
+2. Ensure Ollama is running
+3. Pull at least one model like for example:
 ```bash
 ollama pull deepseek-coder-v2:16b
 ```
@@ -93,19 +93,19 @@ Available via Command Palette:
 - `Ollama Autopilot: Disable`
 - `Ollama Autopilot: Snooze`
 - `Ollama Autopilot: Select Model`
-    
+
 ## 🧩 How It Works
-1.  Captures configurable surrounding context
-2.  Builds a prompt using your template
-3.  Sends the request to Ollama
-4.  Returns only the code continuation
-5.  Displays inline completion
+1. Captures configurable surrounding context
+2. Builds a prompt using your template
+3. Sends the request to Ollama
+4. Returns only the code continuation
+5. Displays inline completion
 
 **All processing happens locally!**
 
 ## ⚠️ Known Limitations
 - If Autopilot is snoozed and manually toggled multiple times, it may re-enable after the original snooze timer expires.
-    
+
 This edge case does not affect normal usage and will be addressed in a future update.
 
 ## 🔒 Privacy
@@ -120,7 +120,7 @@ Ollama Autopilot runs entirely locally. Performance depends heavily on:
 - Hardware (CPU / GPU)
 - Available RAM
 - Context size configuration
-    
+
 Larger models (e.g., 16B+) may introduce noticeable latency before inline suggestions appear, especially on CPU-only systems.
 
 #### Tips for Better Performance
