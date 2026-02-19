@@ -79,12 +79,16 @@
         "ollama-autopilot.general.autocompleteDelayMs": {
           "type": "number",
           "default": 200,
+          "minimum": 0,
+          "maximum": 60000,
           "description": "Delay in milliseconds before triggering autocomplete",
           "order": 3
         },
         "ollama-autopilot.general.snoozeTimeMin": {
           "type": "number",
           "default": 5,
+          "minimum": 0,
+          "maximum": 1440,
           "description": "Time in minutes the Ollama Autopilot will snooze its autocomplete before resuming",
           "order": 4
         },
@@ -97,30 +101,40 @@
         "ollama-autopilot.model.maxAutocompleteTokens": {
           "type": "number",
           "default": 100,
+          "minimum": 1,
+          "maximum": 131072,
           "description": "Maximum number of tokens for autocomplete",
           "order": 6
         },
         "ollama-autopilot.model.temperature": {
           "type": "number",
           "default": 0.2,
+          "minimum": 0,
+          "maximum": 1,
           "description": "Model temperature (typical range 0-0.4)",
           "order": 7
         },
           "ollama-autopilot.model.modelKeepAliveTimeMin": {
           "type": "number",
           "default": 10,
+          "minimum": -1,
+          "maximum": 1440,
           "description": "Time in minutes the model should remain loaded in memory (use -1 for unlimited)",
           "order": 9
         },
           "ollama-autopilot.prompt.textBeforeCursorSize": {
           "type": "number",
           "default": 4096,
+          "minimum": 0,
+          "maximum": 131072,
           "description": "Number of text characters before the cursor that should be considered (keep your models context size in mind)",
           "order": 10
         },
         "ollama-autopilot.prompt.textAfterCursorSize": {
           "type": "number",
           "default": 0,
+          "minimum": 0,
+          "maximum": 131072,
           "description": "Number of text characters after the cursor that should be considered (keep your models context size in mind; default prompt does not use this)",
           "order": 11
         },
