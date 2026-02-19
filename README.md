@@ -3,7 +3,7 @@
 <img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png" height="64">
 
 # Ollama Autopilot - Local LLM Autocomplete for VS Code
-[Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes)
+[Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes) • [Changelog](https://github.com/dadul96/ollama-autopilot/blob/master/CHANGELOG.md)
 
 *** 
 </div>
@@ -130,9 +130,8 @@ Larger models (e.g., 16B+) may introduce noticeable latency before inline sugges
 - Lower `maxAutocompleteTokens`
 - Ensure Ollama is running with GPU acceleration if available
 
-## 📌 Release Notes
-### 1.0.0
-Initial release
+## 📌 [Changelog](https://github.com/dadul96/ollama-autopilot/blob/master/CHANGELOG.md)
+⬆️ Click the title to view the changelog. ⬆️
 
 ## 🙏 Acknowledgments
 - Built with [Ollama](https://ollama.com/)
