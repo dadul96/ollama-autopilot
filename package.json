@@ -36,7 +36,7 @@
   "open source copilot"
   ],
   "license": "MIT",
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": ["onLanguage"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
