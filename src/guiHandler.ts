@@ -10,7 +10,11 @@ enum ActionItems {
     Toggle = "Toggle",
     Snooze = "Snooze",
     SelectModel = "Select Model",
-    Settings = "Settings"
+    Settings = "Settings",
+    ViewInstructions = "View Instructions",
+    ViewUrlSettings = "View URL Settings",
+    TestConnection = "Test Connection",
+    InstallOllama = "Install Ollama"
 }
 
 export class GuiHandler {
@@ -36,8 +40,8 @@ export class GuiHandler {
         this.context.subscriptions.push(this.statusBarItem);
     }
 
-    public dispose(): void {  
-        this.statusBarItem?.dispose();  
+    public dispose(): void {
+        this.statusBarItem?.dispose();
     }  
 
     public indicateOllamaNotAvailable() {
@@ -70,25 +74,41 @@ export class GuiHandler {
 
     public showOllamaNotAvailableError() {
         vscode.window.showErrorMessage(
-                "Failed to connect to Ollama server. Please ensure Ollama is running on your system and check your configuration settings.",
-                ActionItems.Settings,
-            )
-            .then((selection) => {
-                if (selection === ActionItems.Settings) {
-                    this.executeAction(ActionItems.Settings);
-                }
-            });
+            `Cannot connect to Ollama at ${this.configHandler.baseUrl}. ` +
+            `Make sure Ollama is running and the URL is correct.`,
+            ActionItems.ViewUrlSettings,
+            ActionItems.TestConnection,
+            ActionItems.InstallOllama
+        ).then((selection) => {
+            switch (selection) {
+                case ActionItems.ViewUrlSettings:
+                    this.executeAction(ActionItems.ViewUrlSettings);
+                    break;
+                case ActionItems.TestConnection:
+                    this.executeAction(ActionItems.TestConnection);
+                    break;
+                case ActionItems.InstallOllama:
+                    this.executeAction(ActionItems.InstallOllama);
+                    break;
+            }
+        });
     }
 
     public showNoModelsError() {
         vscode.window.showErrorMessage(
-                "No Ollama models found. Please pull a model using 'ollama pull <model>'.",
-            );
-    }
+            "No Ollama models found. You need to pull at least one model before using Autopilot.",
+            "View Instructions"
+        ).then((selection) => {
+            if (selection === ActionItems.ViewInstructions) {
+                this.executeAction(ActionItems.ViewInstructions);
+            }
+        });
+    } 
 
     public showWrongModelSelectedError() {
         vscode.window.showWarningMessage(
-                `Completion model "${this.configHandler.modelName}" not found.`,
+                `Completion model "${this.configHandler.modelName}" not found. ` +
+                `It may have been removed or renamed.`,
                 ActionItems.SelectModel
             )
             .then((selection) => {
@@ -178,6 +198,21 @@ export class GuiHandler {
                 break;
             case ActionItems.Settings:
                 vscode.commands.executeCommand("workbench.action.openSettings", "ollama-autopilot");
+                break;
+            case ActionItems.ViewInstructions:
+                vscode.env.openExternal(vscode.Uri.parse("https://docs.ollama.com/cli#download-a-model"));
+                break;
+            case ActionItems.ViewUrlSettings:
+                vscode.commands.executeCommand(
+                    "workbench.action.openSettings",
+                    "ollama-autopilot.general.baseUrl"
+                );
+                break;
+            case ActionItems.TestConnection:
+                vscode.env.openExternal(vscode.Uri.parse(this.configHandler.baseUrl));
+                break;
+            case ActionItems.InstallOllama:
+                vscode.env.openExternal(vscode.Uri.parse("https://ollama.com/download"));
                 break;
             }
         }
