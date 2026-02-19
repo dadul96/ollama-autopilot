@@ -9,3 +9,6 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+images/screen_record.gif
+images/ollama_autopilot_logo_small.png
+images/ollama_autopilot_logo_big.png
