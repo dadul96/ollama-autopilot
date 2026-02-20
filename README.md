@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png" height="64">
+<img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png?raw=true" height="64">
 
 # Ollama Autopilot - Local LLM Autocomplete for VS Code
 [Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes) • [Changelog](https://github.com/dadul96/ollama-autopilot/blob/master/CHANGELOG.md)
@@ -19,7 +19,7 @@ Perfect for developers who want:
 - Privacy-focused autocomplete
 - Open-source AI tooling
 
-![](https://github.com/dadul96/ollama-autopilot/blob/master/images/screen_record.gif)
+![](https://github.com/dadul96/ollama-autopilot/blob/master/images/screen_record.gif?raw=true)
 
 ## ✨ Features
 #### 🦙 Fully Local LLM Autocomplete
