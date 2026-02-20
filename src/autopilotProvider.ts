@@ -73,19 +73,31 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
          * slightly faster, since there is usually less or no code after
          * the cursor.
         */
+        const textAfterCursorIntermediatePlaceholder: string = "pS7inMQx6FhGs289J3Uw7szRes";
+        const textBeforeCursorIntermediatePlaceholder: string = "R1jq1M19LlM7XYhu5233y6OrqI";
 
         const placeholderMap: Record<string, string> = {
             "${workspaceName}": vscode.workspace.name || "no-workspace-name",
             "${fileName}": document.fileName,
             "${languageId}": document.languageId,
-            "${textAfterCursor}": "${textAfterCursorPlaceholderStringThatHopefullyNobodyEverUsesInTheCode}",
-            "${textBeforeCursor}": "${textBeforeCursorPlaceholderStringThatHopefullyNobodyEverUsesInTheCode}",
-            "${textAfterCursorPlaceholderStringThatHopefullyNobodyEverUsesInTheCode}": this.getTextAfterCursor(document, cursorPosition),
-            "${textBeforeCursorPlaceholderStringThatHopefullyNobodyEverUsesInTheCode}": this.getTextBeforeCursor(document, cursorPosition)
+            "${textAfterCursor}": textAfterCursorIntermediatePlaceholder,
+            "${textBeforeCursor}": textBeforeCursorIntermediatePlaceholder,
+            [textAfterCursorIntermediatePlaceholder]: this.getTextAfterCursor(document, cursorPosition),
+            [textBeforeCursorIntermediatePlaceholder]: this.getTextBeforeCursor(document, cursorPosition)
         };
 
+        const replacements: Array<[string, string]> = [
+            ["${workspaceName}", vscode.workspace.name || "no-workspace-name"],
+            ["${fileName}", document.fileName],
+            ["${languageId}", document.languageId],
+            ["${textAfterCursor}", textAfterCursorIntermediatePlaceholder],
+            ["${textBeforeCursor}", textBeforeCursorIntermediatePlaceholder],
+            [textAfterCursorIntermediatePlaceholder, this.getTextAfterCursor(document, cursorPosition)],
+            [textBeforeCursorIntermediatePlaceholder, this.getTextBeforeCursor(document, cursorPosition)],
+        ];
+
         let promptText = this.configHandler.promptText;
-        for (const [key, value] of Object.entries(placeholderMap)) {
+        for (const [key, value] of replacements) {
             promptText = promptText.replaceAll(key, value);
         }
 
