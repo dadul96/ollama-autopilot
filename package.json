@@ -78,7 +78,7 @@
         },
         "ollama-autopilot.general.autocompleteDelayMs": {
           "type": "number",
-          "default": 200,
+          "default": 500,
           "minimum": 0,
           "maximum": 60000,
           "description": "Delay in milliseconds before triggering autocomplete",
@@ -94,7 +94,7 @@
         },
         "ollama-autopilot.model.modelName": {
           "type": "string",
-          "default": "",
+          "default": "deepseek-coder-v2:16b",
           "description": "Ollama model name",
           "order": 5
         },
@@ -108,7 +108,7 @@
         },
         "ollama-autopilot.model.temperature": {
           "type": "number",
-          "default": 0.2,
+          "default": 0.1,
           "minimum": 0,
           "maximum": 1,
           "description": "Model temperature (typical range 0-0.4)",
@@ -124,7 +124,7 @@
         },
           "ollama-autopilot.prompt.textBeforeCursorSize": {
           "type": "number",
-          "default": 4096,
+          "default": 2048,
           "minimum": 0,
           "maximum": 131072,
           "description": "Number of text characters before the cursor that should be considered (keep your models context size in mind)",
@@ -141,7 +141,7 @@
           "ollama-autopilot.prompt.promptText": {
           "type": "string",
           "editPresentation": "multilineText",
-          "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n\nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n\nExisting code: \n${textBeforeCursor}",
+          "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n \nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n \nExisting code: \n${textBeforeCursor}",
           "description": "Prompt text. You can use the following template literals in your prompt: ${workspaceName}, ${fileName}, ${languageId}, ${textBeforeCursor}, ${textAfterCursor}",
           "order": 12
         }

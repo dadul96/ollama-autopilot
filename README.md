@@ -68,21 +68,21 @@ ollama pull deepseek-coder-v2:16b
 | --- | --- | --- |
 | `ollama-autopilot.general.autopilotEnabled` | Enable/disable Autopilot | `true` |
 | `ollama-autopilot.general.baseUrl` | Ollama API base URL | `http://localhost:11434` |
-| `ollama-autopilot.general.autocompleteDelayMs` | Delay before requesting completion | `200` |
+| `ollama-autopilot.general.autocompleteDelayMs` | Delay before requesting completion | `500` |
 | `ollama-autopilot.general.snoozeTimeMin` | Snooze duration in minutes | `5` |
 
 ### Model
 | Setting | Description | Default |
 | --- | --- | --- |
-| `ollama-autopilot.model.modelName` | Ollama model name | `""` |
+| `ollama-autopilot.model.modelName` | Ollama model name | `"deepseek-coder-v2:16b"` |
 | `ollama-autopilot.model.maxAutocompleteTokens` | Maximum completion tokens | `100` |
-| `ollama-autopilot.model.temperature` | Sampling temperature | `0.2` |
+| `ollama-autopilot.model.temperature` | Sampling temperature | `0.1` |
 | `ollama-autopilot.model.modelKeepAliveTimeMin` | Model keep-alive time in memory (-1 = unlimited) | `10` |
 
 ### Prompt
 | Setting | Description | Default |
 | --- | --- | --- |
-| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters before cursor to include | `4096` |
+| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters before cursor to include | `2048` |
 | `ollama-autopilot.prompt.textAfterCursorSize` | Characters after cursor to include | `0` |
 | `ollama-autopilot.prompt.promptText` | Prompt template | See default |
 
