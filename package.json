@@ -98,7 +98,7 @@
           "type": "number",
           "default": 500,
           "minimum": 0,
-          "maximum": 60000,
+          "maximum": 10000,
           "description": "Delay in milliseconds before triggering autocomplete",
           "order": 4
         },
@@ -120,7 +120,7 @@
           "type": "number",
           "default": 100,
           "minimum": 1,
-          "maximum": 131072,
+          "maximum": 1000000,
           "description": "Maximum number of tokens for autocomplete",
           "order": 7
         },
@@ -144,7 +144,7 @@
           "type": "number",
           "default": 2048,
           "minimum": 0,
-          "maximum": 131072,
+          "maximum": 4000000,
           "description": "Number of characters (not tokens) before the cursor that should be considered (keep your models context size in mind)",
           "order": 10
         },
@@ -152,7 +152,7 @@
           "type": "number",
           "default": 0,
           "minimum": 0,
-          "maximum": 131072,
+          "maximum": 4000000,
           "description": "Number of characters (not tokens) after the cursor that should be considered (keep your models context size in mind; default prompt does not use this)",
           "order": 11
         },
