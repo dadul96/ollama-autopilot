@@ -202,7 +202,15 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         this.abortController = new AbortController();
 
         try {
-            await this.debounce(this.configHandler.autocompleteDelayMs, token);
+            if (context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic) {
+                // cancel completion if user only wants manual trigger:
+                if (this.configHandler.suggestionTrigger === "manual") {
+                    return undefined;
+                }
+
+                // use delay only for automatic trigger:
+                await this.debounce(this.configHandler.autocompleteDelayMs, token);
+            }
 
             if (token.isCancellationRequested) {
                 return undefined;

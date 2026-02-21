@@ -5,6 +5,7 @@ export class ConfigHandler implements vscode.Disposable {
     private _disposable?: vscode.Disposable;
 
     private _autopilotEnabled!: boolean;
+    private _suggestionTrigger!: string;
     private _baseUrl!: string;
     private _autocompleteDelayMs!: number;
     private _snoozeTimeMin!: number;
@@ -51,6 +52,7 @@ export class ConfigHandler implements vscode.Disposable {
         this._config = vscode.workspace.getConfiguration("ollama-autopilot");
         
         this._autopilotEnabled = this.getRequired<boolean>("general.autopilotEnabled");
+        this._suggestionTrigger = this.getRequired<string>("general.suggestionTrigger");
         this._baseUrl = this.getRequired<string>("general.baseUrl");
         this._autocompleteDelayMs = this.getRequired<number>("general.autocompleteDelayMs");
         this._snoozeTimeMin = this.getRequired<number>("general.snoozeTimeMin");
@@ -64,6 +66,7 @@ export class ConfigHandler implements vscode.Disposable {
     }
 
     get autopilotEnabled() { return this._autopilotEnabled; }
+    get suggestionTrigger() { return this._suggestionTrigger; }
     get baseUrl() { return this._baseUrl; }
     get autocompleteDelayMs() { return this._autocompleteDelayMs; }
     get snoozeTimeMin() { return this._snoozeTimeMin; }

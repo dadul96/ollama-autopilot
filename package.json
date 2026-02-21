@@ -39,6 +39,13 @@
   "activationEvents": ["onLanguage"],
   "main": "./out/extension.js",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "editor.action.inlineSuggest.trigger",
+        "key": "ctrl+alt+space",
+        "when": "editorTextFocus && !inlineSuggestionVisible"
+      }
+    ],
     "commands": [
       {
         "command": "ollama-autopilot.showMenu",
@@ -70,11 +77,22 @@
           "description": "Enable or disable Ollama Autopilot",
           "order": 1
         },
+        "ollama-autopilot.general.suggestionTrigger": {
+          "type": "string",
+          "enum": ["automatic", "manual"],
+          "default": "automatic",
+          "enumDescriptions": [
+            "Automatically triggers suggestions while typing & on the keybinding",
+            "Triggers suggestions only when the user presses the dedicated keybinding"
+          ],
+          "description": "When to run the suggestion engine. Set to \"automatic\" to trigger suggestions as you type & on the keybinding, or choose \"manual\" to trigger only with a keybinding. The default keybinding is \"Ctrl+Alt+Space\" but can be customized in VS Code's keybindings settings.",
+          "order": 2
+        },
         "ollama-autopilot.general.baseUrl": {
           "type": "string",
           "default": "http://localhost:11434",
           "description": "Ollama API Base URL",
-          "order": 2
+          "order": 3
         },
         "ollama-autopilot.general.autocompleteDelayMs": {
           "type": "number",
@@ -82,7 +100,7 @@
           "minimum": 0,
           "maximum": 60000,
           "description": "Delay in milliseconds before triggering autocomplete",
-          "order": 3
+          "order": 4
         },
         "ollama-autopilot.general.snoozeTimeMin": {
           "type": "number",
@@ -90,13 +108,13 @@
           "minimum": 0,
           "maximum": 1440,
           "description": "Time in minutes the Ollama Autopilot will snooze its autocomplete before resuming",
-          "order": 4
+          "order": 5
         },
         "ollama-autopilot.model.modelName": {
           "type": "string",
           "default": "deepseek-coder-v2:16b",
           "description": "Ollama model name",
-          "order": 5
+          "order": 6
         },
         "ollama-autopilot.model.maxAutocompleteTokens": {
           "type": "number",
@@ -104,7 +122,7 @@
           "minimum": 1,
           "maximum": 131072,
           "description": "Maximum number of tokens for autocomplete",
-          "order": 6
+          "order": 7
         },
         "ollama-autopilot.model.temperature": {
           "type": "number",
@@ -112,7 +130,7 @@
           "minimum": 0,
           "maximum": 1,
           "description": "Model temperature (typical range 0-0.4)",
-          "order": 7
+          "order": 8
         },
           "ollama-autopilot.model.modelKeepAliveTimeMin": {
           "type": "number",
