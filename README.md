@@ -108,11 +108,6 @@ Available via Command Palette:
 
 **All processing happens locally!**
 
-## ⚠️ Known Limitations
-- If Autopilot is snoozed and manually toggled multiple times, it may re-enable after the original snooze timer expires.
-
-This edge case does not affect normal usage and will be addressed in a future update.
-
 ## 🔒 Privacy
 - No external APIs
 - No telemetry

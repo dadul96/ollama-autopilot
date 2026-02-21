@@ -10,11 +10,21 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     private abortController?: AbortController;
     private debounceTimer?: NodeJS.Timeout;
     private snoozeTimeout?: NodeJS.Timeout;
+    private isSnoozeActive: boolean;
+    private configChangeDisposable?: vscode.Disposable;
 
     constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler, guiHandler: GuiHandler) {
         this.ollamaClient = ollamaClient;
         this.configHandler = configHandler;
         this.guiHandler = guiHandler;
+        this.isSnoozeActive = false;
+
+        this.configChangeDisposable = 
+            this.configHandler.onConfigDidChange(() => {
+                if (!this.configHandler.autopilotEnabled) {
+                    this.clearSnoozeTimer();
+                }
+            });
     }
 
     public dispose(): void {
@@ -25,6 +35,18 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             clearTimeout(this.snoozeTimeout);
         }
         this.abortController?.abort();
+        this.configChangeDisposable?.dispose();
+    }
+
+
+    private async clearSnoozeTimer(): Promise<void> {
+        if (this.isSnoozeActive) {
+            if (this.snoozeTimeout) {
+                clearTimeout(this.snoozeTimeout);
+                this.snoozeTimeout = undefined;
+            }
+            this.isSnoozeActive = false;
+        }
     }
 
     private getTextBeforeCursor(document: vscode.TextDocument, cursorPosition: vscode.Position): string {
@@ -159,13 +181,17 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     public async snoozeAutopilot(): Promise<void> {
         if (this.configHandler.autopilotEnabled) {
             this.guiHandler.showSnoozeMessage();
-            vscode.commands.executeCommand("ollama-autopilot.disable");
+            await this.configHandler.setAutopilotEnabledState(false);
             if (this.snoozeTimeout) {
                 clearTimeout(this.snoozeTimeout);
             }
+            this.isSnoozeActive = true;
             this.snoozeTimeout = setTimeout(async () => {
-                vscode.commands.executeCommand("ollama-autopilot.enable");
-                this.snoozeTimeout = undefined;
+                if (this.isSnoozeActive) {
+                    this.configHandler.setAutopilotEnabledState(true);
+                    this.snoozeTimeout = undefined;
+                    this.isSnoozeActive = false;
+                }
             }, this.configHandler.snoozeTimeMin * 60 * 1000);
         }
     }

@@ -10,7 +10,7 @@ All notable changes to the "ollama-autopilot" extension will be documented in th
 - Config descriptions to be more meaningful
 
 ### Fixed
-- 
+- Snooze bug: snooze timer could re-enable the extension after manually disabling it
 
 
 ## [1.0.0](https://github.com/dadul96/ollama-autopilot/releases/tag/v1.0.0) - 2026-02-19
