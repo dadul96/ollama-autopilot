@@ -5,6 +5,7 @@ All notable changes to the "ollama-autopilot" extension will be documented in th
 ### Added
 - Keybinding (ctrl+alt+space) for manual trigger
 - Option to choose between automatic or manual suggestion trigger
+- Model context size setting (num_ctx)
 
 ### Changed
 - Config descriptions to be more meaningful

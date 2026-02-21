@@ -116,13 +116,21 @@
           "description": "Ollama model name",
           "order": 6
         },
+        "ollama-autopilot.model.contextSize": {
+          "type": "number",
+          "default": 4096,
+          "minimum": 1024,
+          "maximum": 1000000,
+          "description": "Model context size (token)",
+          "order": 7
+        },
         "ollama-autopilot.model.maxAutocompleteTokens": {
           "type": "number",
           "default": 100,
           "minimum": 1,
           "maximum": 1000000,
           "description": "Maximum number of tokens for autocomplete",
-          "order": 7
+          "order": 8
         },
         "ollama-autopilot.model.temperature": {
           "type": "number",
@@ -130,7 +138,7 @@
           "minimum": 0,
           "maximum": 1,
           "description": "Model temperature (typical range 0-0.4)",
-          "order": 8
+          "order": 9
         },
           "ollama-autopilot.model.modelKeepAliveTimeMin": {
           "type": "number",
@@ -138,7 +146,7 @@
           "minimum": -1,
           "maximum": 1440,
           "description": "Time in minutes the model should remain loaded in memory (use -1 for unlimited)",
-          "order": 9
+          "order": 10
         },
           "ollama-autopilot.prompt.textBeforeCursorSize": {
           "type": "number",
@@ -146,7 +154,7 @@
           "minimum": 0,
           "maximum": 4000000,
           "description": "Number of characters (not tokens) before the cursor that should be considered (keep your models context size in mind)",
-          "order": 10
+          "order": 11
         },
         "ollama-autopilot.prompt.textAfterCursorSize": {
           "type": "number",
@@ -154,14 +162,14 @@
           "minimum": 0,
           "maximum": 4000000,
           "description": "Number of characters (not tokens) after the cursor that should be considered (keep your models context size in mind; default prompt does not use this)",
-          "order": 11
+          "order": 12
         },
           "ollama-autopilot.prompt.promptText": {
           "type": "string",
           "editPresentation": "multilineText",
           "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n \nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n \nExisting code: \n${textBeforeCursor}",
           "description": "Prompt text. You can use the following template literals in your prompt: ${workspaceName}, ${fileName}, ${languageId}, ${textBeforeCursor}, ${textAfterCursor}",
-          "order": 12
+          "order": 13
         }
       }
     }

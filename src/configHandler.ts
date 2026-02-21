@@ -10,6 +10,7 @@ export class ConfigHandler implements vscode.Disposable {
     private _autocompleteDelayMs!: number;
     private _snoozeTimeMin!: number;
     private _modelName!: string;
+    private _contextSize!: number;
     private _maxAutocompleteTokens!: number;
     private _temperature!: number;
     private _modelKeepAliveTimeMin!: number;
@@ -57,6 +58,7 @@ export class ConfigHandler implements vscode.Disposable {
         this._autocompleteDelayMs = this.getRequired<number>("general.autocompleteDelayMs");
         this._snoozeTimeMin = this.getRequired<number>("general.snoozeTimeMin");
         this._modelName = this.getRequired<string>("model.modelName");
+        this._contextSize = this.getRequired<number>("model.contextSize");
         this._maxAutocompleteTokens = this.getRequired<number>("model.maxAutocompleteTokens");
         this._temperature = this.getRequired<number>("model.temperature");
         this._modelKeepAliveTimeMin = this.getRequired<number>("model.modelKeepAliveTimeMin");
@@ -71,6 +73,7 @@ export class ConfigHandler implements vscode.Disposable {
     get autocompleteDelayMs() { return this._autocompleteDelayMs; }
     get snoozeTimeMin() { return this._snoozeTimeMin; }
     get modelName() { return this._modelName; }
+    get contextSize() { return this._contextSize; }
     get maxAutocompleteTokens() { return this._maxAutocompleteTokens; }
     get temperature() { return this._temperature; }
     get modelKeepAliveTimeMin() { return this._modelKeepAliveTimeMin; }

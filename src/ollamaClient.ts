@@ -10,6 +10,7 @@ export interface OllamaRequest {
     think?: boolean;
     options?: {
         temperature?: number;
+        num_ctx?: number;
         num_predict?: number;
         stop?: string[];
     };
@@ -154,7 +155,12 @@ export class OllamaClient {
     private async preloadModel(): Promise<void> {
         const request: OllamaRequest = {
             model: this.configHandler.modelName, 
-            keep_alive: `${this.configHandler.modelKeepAliveTimeMin}m`
+            keep_alive: `${this.configHandler.modelKeepAliveTimeMin}m`,
+            options: {            
+                temperature: this.configHandler.temperature,
+                num_ctx: this.configHandler.contextSize,
+                num_predict: this.configHandler.maxAutocompleteTokens,
+            }
         };
         this.request(request);
     }

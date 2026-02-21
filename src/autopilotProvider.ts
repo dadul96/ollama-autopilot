@@ -235,6 +235,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             const model = this.configHandler.modelName;
             const prompt = this.createPromptString(document, cursorPosition);
             const temperature = this.configHandler.temperature;
+            const num_ctx = this.configHandler.contextSize;
             const num_predict = this.configHandler.maxAutocompleteTokens;
             const stop = ["\n\n", "```"];
 
@@ -244,6 +245,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                     prompt,
                     options: {
                         temperature,
+                        num_ctx,
                         num_predict,
                         stop,
                     },

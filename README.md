@@ -42,17 +42,23 @@ You have full control over the completion behavior via a configurable prompt tem
 
 The default prompt is optimized for short, style-matching inline completions.
 
-#### 🔁 Model Selection
-Browse and switch between locally installed Ollama models directly from VS Code.
+#### 🔁 Model Selection and Configuration
+Browse and switch between locally installed Ollama models directly from VS Code.  
+Configure model parameters such as:
+- Temperature
+- Context size
+- Response token count
 
 #### 😴 Snooze Mode
 Temporarily disable autocomplete for a configurable number of minutes.
 
 #### 📊 Status Bar Indicator
-Clear status feedback:
+Clear status feedback of:
 - Enabled
 - Disabled
 - Snoozed
+- Ollama not available
+- Missing model
 
 Access the menu directly from the status bar.
 
@@ -80,6 +86,7 @@ ollama pull deepseek-coder-v2:16b
 | Setting | Description | Default |
 | --- | --- | --- |
 | `ollama-autopilot.model.modelName` | Ollama model name | `"deepseek-coder-v2:16b"` |
+| `ollama-autopilot.model.contextSize` | Model context size | `4096` |
 | `ollama-autopilot.model.maxAutocompleteTokens` | Maximum completion tokens | `100` |
 | `ollama-autopilot.model.temperature` | Sampling temperature | `0.1` |
 | `ollama-autopilot.model.modelKeepAliveTimeMin` | Model keep-alive time in memory (-1 = unlimited) | `10` |
