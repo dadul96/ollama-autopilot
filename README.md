@@ -82,8 +82,8 @@ ollama pull deepseek-coder-v2:16b
 ### Prompt
 | Setting | Description | Default |
 | --- | --- | --- |
-| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters before cursor to include | `2048` |
-| `ollama-autopilot.prompt.textAfterCursorSize` | Characters after cursor to include | `0` |
+| `ollama-autopilot.prompt.textBeforeCursorSize` | Characters (not tokens) before cursor to include | `2048` |
+| `ollama-autopilot.prompt.textAfterCursorSize` | Characters (not tokens) after cursor to include | `0` |
 | `ollama-autopilot.prompt.promptText` | Prompt template | See default |
 
 ## 🎛 Commands
