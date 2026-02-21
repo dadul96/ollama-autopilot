@@ -76,16 +76,6 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         const textAfterCursorIntermediatePlaceholder: string = "pS7inMQx6FhGs289J3Uw7szRes";
         const textBeforeCursorIntermediatePlaceholder: string = "R1jq1M19LlM7XYhu5233y6OrqI";
 
-        const placeholderMap: Record<string, string> = {
-            "${workspaceName}": vscode.workspace.name || "no-workspace-name",
-            "${fileName}": document.fileName,
-            "${languageId}": document.languageId,
-            "${textAfterCursor}": textAfterCursorIntermediatePlaceholder,
-            "${textBeforeCursor}": textBeforeCursorIntermediatePlaceholder,
-            [textAfterCursorIntermediatePlaceholder]: this.getTextAfterCursor(document, cursorPosition),
-            [textBeforeCursorIntermediatePlaceholder]: this.getTextBeforeCursor(document, cursorPosition)
-        };
-
         const replacements: Array<[string, string]> = [
             ["${workspaceName}", vscode.workspace.name || "no-workspace-name"],
             ["${fileName}", document.fileName],
