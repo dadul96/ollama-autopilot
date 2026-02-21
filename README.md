@@ -28,6 +28,10 @@ Uses Ollama to generate inline code completions directly from local models.
 #### ⚡ Inline Completion
 Suggestions appear directly in the editor as you type — no chat window required.
 
+#### 🚦 Automatic or Manual Trigger
+Decide if you want automatic code suggestion or if you want to trigger it manually via keybinding. 
+Default keybinding is "ctrl+alt+space", but can be overwritten by the user.
+
 #### 🧠 Customizable Prompt Templates
 You have full control over the completion behavior via a configurable prompt template. Supported template variables:
 - `${workspaceName}`
@@ -67,6 +71,7 @@ ollama pull deepseek-coder-v2:16b
 | Setting | Description | Default |
 | --- | --- | --- |
 | `ollama-autopilot.general.autopilotEnabled` | Enable/disable Autopilot | `true` |
+| `ollama-autopilot.general.suggestionTrigger` | Trigger selection for code suggestion | `automatic` |
 | `ollama-autopilot.general.baseUrl` | Ollama API base URL | `http://localhost:11434` |
 | `ollama-autopilot.general.autocompleteDelayMs` | Delay before requesting completion | `500` |
 | `ollama-autopilot.general.snoozeTimeMin` | Snooze duration in minutes | `5` |
