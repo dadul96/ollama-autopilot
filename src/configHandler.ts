@@ -14,6 +14,7 @@ export class ConfigHandler implements vscode.Disposable {
     private _maxAutocompleteTokens!: number;
     private _temperature!: number;
     private _modelKeepAliveTimeMin!: number;
+    private _stopSequences!: string[];
     private _promptText!: string;
     private _textBeforeCursorSize!: number;
     private _textAfterCursorSize!: number;
@@ -62,9 +63,22 @@ export class ConfigHandler implements vscode.Disposable {
         this._maxAutocompleteTokens = this.getRequired<number>("model.maxAutocompleteTokens");
         this._temperature = this.getRequired<number>("model.temperature");
         this._modelKeepAliveTimeMin = this.getRequired<number>("model.modelKeepAliveTimeMin");
+        this._stopSequences = this.getRequired<string[]>("model.stopSequences");
         this._promptText = this.getRequired<string>("prompt.promptText");
         this._textBeforeCursorSize = this.getRequired<number>("prompt.textBeforeCursorSize");
         this._textAfterCursorSize = this.getRequired<number>("prompt.textAfterCursorSize");
+
+        /** 
+         * Convert escape characters
+         * (e.g. user enters "\n" -> it will become "\\n" -> here we convert back to "\n")
+         */ 
+        this._stopSequences.forEach((str, index) => {
+            try {
+                this._stopSequences[index] = JSON.parse(`"${str}"`);
+            } catch (error) {
+                // do nothing; keep original string
+            }
+        });
     }
 
     get autopilotEnabled() { return this._autopilotEnabled; }
@@ -77,6 +91,7 @@ export class ConfigHandler implements vscode.Disposable {
     get maxAutocompleteTokens() { return this._maxAutocompleteTokens; }
     get temperature() { return this._temperature; }
     get modelKeepAliveTimeMin() { return this._modelKeepAliveTimeMin; }
+    get stopSequences() { return this._stopSequences; }
     get promptText() { return this._promptText; }
     get textBeforeCursorSize() { return this._textBeforeCursorSize; }
     get textAfterCursorSize() { return this._textAfterCursorSize; }

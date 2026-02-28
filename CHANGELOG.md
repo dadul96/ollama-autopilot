@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to the "ollama-autopilot" extension will be documented in this file.
 
+## [1.2.0](https://github.com/dadul96/ollama-autopilot/releases/tag/v1.2.0) - 2026-02-28
+### Added
+- Config option to define custom stop sequence strings (needed for Fill-in-the-Middle (FIM))
+- Description in README.md on how to use FIM with this extension
+
+
 ## [1.1.0](https://github.com/dadul96/ollama-autopilot/releases/tag/v1.1.0) - 2026-02-22
 ### Added
 - Keybinding (ctrl+alt+space) for manual trigger

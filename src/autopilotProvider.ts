@@ -237,7 +237,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             const temperature = this.configHandler.temperature;
             const num_ctx = this.configHandler.contextSize;
             const num_predict = this.configHandler.maxAutocompleteTokens;
-            const stop = ["\n\n", "```"];
+            const stop = this.configHandler.stopSequences;
 
             const responseString = await this.ollamaClient.generateResponse(
                 {

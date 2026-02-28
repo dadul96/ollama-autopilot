@@ -140,7 +140,7 @@
           "description": "Model temperature (typical range 0-0.4)",
           "order": 9
         },
-          "ollama-autopilot.model.modelKeepAliveTimeMin": {
+        "ollama-autopilot.model.modelKeepAliveTimeMin": {
           "type": "number",
           "default": 10,
           "minimum": -1,
@@ -148,7 +148,15 @@
           "description": "Time in minutes the model should remain loaded in memory (use -1 for unlimited)",
           "order": 10
         },
-          "ollama-autopilot.prompt.textBeforeCursorSize": {
+        "ollama-autopilot.model.stopSequences": {
+          "type": "array",
+          "default": ["\\n\\n", "```", "<EOT>", "<｜EOT｜>"],
+          "description": "Stop sequences strings that will halt response generation",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ollama-autopilot.prompt.textBeforeCursorSize": {
           "type": "number",
           "default": 2048,
           "minimum": 0,
@@ -164,7 +172,7 @@
           "description": "Number of characters (not tokens) after the cursor that should be considered (keep your models context size in mind; default prompt does not use this)",
           "order": 12
         },
-          "ollama-autopilot.prompt.promptText": {
+        "ollama-autopilot.prompt.promptText": {
           "type": "string",
           "editPresentation": "multilineText",
           "default": "You are an inline code completion engine. \nContinue the following ${languageId} code exactly as a developer would type next. \n \nRules: \n- Output only the code continuation \n- Do not repeat or modify existing code \n- Do not add comments, imports, or explanations \n- Match the existing style, formatting, and indentation \n- Keep the completion short and stop early \n \nExisting code: \n${textBeforeCursor}",

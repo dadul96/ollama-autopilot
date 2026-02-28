@@ -2,7 +2,7 @@
 
 <img src="https://github.com/dadul96/ollama-autopilot/blob/master/images/ollama_autopilot_logo.png?raw=true" height="64">
 
-# Ollama Autopilot - Local LLM Autocomplete for VS Code
+# **Ollama Autopilot** - Local LLM Autocomplete for VS Code
 [Features](#-features) • [Requirements](#-requirements) • [Extension Settings](#%EF%B8%8F-extension-settings) • [How It Works](#-how-it-works) • [Performance](#-performance-notes) • [Changelog](https://github.com/dadul96/ollama-autopilot/blob/master/CHANGELOG.md)
 
 *** 
@@ -29,8 +29,8 @@ Uses Ollama to generate inline code completions directly from local models.
 Suggestions appear directly in the editor as you type — no chat window required.
 
 #### 🚦 Automatic or Manual Trigger
-Decide if you want automatic code suggestion or if you want to trigger it manually via keybinding. 
-Default keybinding is "ctrl+alt+space", but can be overwritten by the user.
+Decide whether you want automatic code suggestions or to trigger them manually via keybinding.  
+The default keybinding is `ctrl+alt+space`, but it can be overwritten by the user.
 
 #### 🧠 Customizable Prompt Templates
 You have full control over the completion behavior via a configurable prompt template. Supported template variables:
@@ -41,6 +41,13 @@ You have full control over the completion behavior via a configurable prompt tem
 - `${textAfterCursor}`
 
 The default prompt is optimized for short, style-matching inline completions.
+
+#### 💉 Fill-in-the-Middle (FIM) Support
+To use FIM, you could, for example, use the model `codellama:7b-code` and the following prompt:
+```text
+<PRE> ${textBeforeCursor} <SUF>${textAfterCursor} <MID>
+```
+> ⚠️ Ensure to use the correct FIM syntax for your model of choice. Also specify a custom end sequence string if needed. E.g., `<EOT>` is needed for `codellama:7b-code`.
 
 #### 🔁 Model Selection and Configuration
 Browse and switch between locally installed Ollama models directly from VS Code.  
@@ -66,10 +73,10 @@ Access the menu directly from the status bar.
 Before using this extension:
 1. Install Ollama
 2. Ensure Ollama is running
-3. Pull at least one model like for example:
-```bash
-ollama pull deepseek-coder-v2:16b
-```
+3. Pull at least one model, e.g.:
+   ```bash
+   ollama pull deepseek-coder-v2:16b
+   ```
 > ⚠️ Make sure your model's context size supports your configured prompt size and surrounding text.
 
 ## ⚙️ Extension Settings
@@ -89,7 +96,8 @@ ollama pull deepseek-coder-v2:16b
 | `ollama-autopilot.model.contextSize` | Model context size | `4096` |
 | `ollama-autopilot.model.maxAutocompleteTokens` | Maximum completion tokens | `100` |
 | `ollama-autopilot.model.temperature` | Sampling temperature | `0.1` |
-| `ollama-autopilot.model.modelKeepAliveTimeMin` | Model keep-alive time in memory (-1 = unlimited) | `10` |
+| `ollama-autopilot.model.modelKeepAliveTimeMin` | Model keep-alive time in memory (`-1` = unlimited) | `10` |
+| `ollama-autopilot.model.stopSequences` | Stop sequences strings to halt response | [`"\n\n"`, `"```"`, `"<EOT>"`, `"<｜EOT｜>"`] |
 
 ### Prompt
 | Setting | Description | Default |
@@ -123,19 +131,22 @@ Available via Command Palette:
 
 ## 🚀 Performance Notes
 Ollama Autopilot runs entirely locally. Performance depends heavily on:
-- Model size
+- Model and it's size
 - Hardware (CPU / GPU)
 - Available RAM
 - Context size configuration
+- Prompt
 
 Larger models (e.g., 16B+) may introduce noticeable latency before inline suggestions appear, especially on CPU-only systems.
 
 #### Tips for Better Performance
+- Use Fill-in-the-Middle (FIM) if your model supports it
 - Use smaller models (e.g., 7B variants)
 - Reduce `textBeforeCursorSize`
 - Reduce `textAfterCursorSize` to `0` and don't use in prompt
 - Lower `maxAutocompleteTokens`
 - Ensure Ollama is running with GPU acceleration if available
+- The default prompt was optimized for the `deepseek-coder-v2:16b` (instruct) model. You may want to tweak the prompt for your specific model.
 
 ## 📌 [Changelog](https://github.com/dadul96/ollama-autopilot/blob/master/CHANGELOG.md)
 ⬆️ Click the title to view the changelog. ⬆️
