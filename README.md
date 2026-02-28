@@ -140,7 +140,7 @@ Ollama Autopilot runs entirely locally. Performance depends heavily on:
 Larger models (e.g., 16B+) may introduce noticeable latency before inline suggestions appear, especially on CPU-only systems.
 
 #### Tips for Better Performance
-- Use Fill-in-the-Middle (FIM) if your model supports it
+- Try [Fill-in-the-Middle (FIM)](#-fill-in-the-middle-fim-support) if your model supports it
 - Use smaller models (e.g., 7B variants)
 - Reduce `textBeforeCursorSize`
 - Reduce `textAfterCursorSize` to `0` and don't use in prompt
