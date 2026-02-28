@@ -7,7 +7,7 @@
   },
   "icon": "images/ollama_autopilot_logo.png",
   "description": "Local LLM code autocomplete for VS Code powered by Ollama. Inline AI code completion - fully offline, no API keys, no cloud.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/dadul96/ollama-autopilot"
