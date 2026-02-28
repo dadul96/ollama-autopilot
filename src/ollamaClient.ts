@@ -33,18 +33,18 @@ export interface OllamaTagsResponse {
 
 export class OllamaClient {
     private readonly DEFAULT_TIMEOUT_MS = 10000;
-    private configHandler: ConfigHandler;
-    private guiHandler: GuiHandler;
-    private availableModels: string[] = [];
+    private _configHandler: ConfigHandler;
+    private _guiHandler: GuiHandler;
+    private _availableModels: string[] = [];
 
     constructor(configHandler: ConfigHandler, guiHandler: GuiHandler) {
-        this.configHandler = configHandler;
-        this.guiHandler = guiHandler;
+        this._configHandler = configHandler;
+        this._guiHandler = guiHandler;
     }
     
     private async pingOllama(): Promise<boolean> {
         try {
-            const response = await fetch(`${this.configHandler.baseUrl}/api/version`, {
+            const response = await fetch(`${this._configHandler.baseUrl}/api/version`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export class OllamaClient {
     
     private async getModels(): Promise<string[]> {
         try {
-            const response = await fetch(`${this.configHandler.baseUrl}/api/tags`, {
+            const response = await fetch(`${this._configHandler.baseUrl}/api/tags`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export class OllamaClient {
 
     private async request(request: OllamaRequest, signal?: AbortSignal): Promise<string> {
         try {
-            const response = await fetch(`${this.configHandler.baseUrl}/api/generate`, {
+            const response = await fetch(`${this._configHandler.baseUrl}/api/generate`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -110,24 +110,24 @@ export class OllamaClient {
 
     private async checkOllamaAvailable(): Promise<boolean> {
         if (await this.pingOllama()) {
-            this.guiHandler.indicateOllamaEnabled();
+            this._guiHandler.indicateOllamaEnabled();
             return true;
         }
         else {
-            this.guiHandler.indicateOllamaNotAvailable();
-            this.guiHandler.showOllamaNotAvailableError();
+            this._guiHandler.indicateOllamaNotAvailable();
+            this._guiHandler.showOllamaNotAvailableError();
             return false;
         }
     }
 
     private async listAvailableModels(): Promise<boolean> {
         try {
-            this.availableModels = (await this.getModels()).map((model) =>
+            this._availableModels = (await this.getModels()).map((model) =>
                 model.replace(":latest", ""),
             );
-            if (this.availableModels.length === 0) {
-                this.guiHandler.indicateNoValidModelSelected();
-                this.guiHandler.showNoModelsError();
+            if (this._availableModels.length === 0) {
+                this._guiHandler.indicateNoValidModelSelected();
+                this._guiHandler.showNoModelsError();
                 return false;
             }            
             return true;
@@ -140,9 +140,9 @@ export class OllamaClient {
         try {
             await this.listAvailableModels();
 
-            if (!this.availableModels.includes(this.configHandler.modelName)) {
-                this.guiHandler.indicateNoValidModelSelected();
-                this.guiHandler.showWrongModelSelectedError();
+            if (!this._availableModels.includes(this._configHandler.modelName)) {
+                this._guiHandler.indicateNoValidModelSelected();
+                this._guiHandler.showWrongModelSelectedError();
                 return false;
             }
             return true;
@@ -154,12 +154,12 @@ export class OllamaClient {
 
     private async preloadModel(): Promise<void> {
         const request: OllamaRequest = {
-            model: this.configHandler.modelName, 
-            keep_alive: `${this.configHandler.modelKeepAliveTimeMin}m`,
+            model: this._configHandler.modelName, 
+            keep_alive: `${this._configHandler.modelKeepAliveTimeMin}m`,
             options: {            
-                temperature: this.configHandler.temperature,
-                num_ctx: this.configHandler.contextSize,
-                num_predict: this.configHandler.maxAutocompleteTokens,
+                temperature: this._configHandler.temperature,
+                num_ctx: this._configHandler.contextSize,
+                num_predict: this._configHandler.maxAutocompleteTokens,
             }
         };
         this.request(request);
@@ -176,14 +176,14 @@ export class OllamaClient {
     public async selectModelAndPreload() {
         if (await this.checkOllamaAvailable()) {
             if (await this.listAvailableModels()) {
-                await this.guiHandler.showModelSelector(this.availableModels);
+                await this._guiHandler.showModelSelector(this._availableModels);
                 await this.preloadModel();
             }
         }
     }
 
     public async generateResponse(request: OllamaRequest, signal?: AbortSignal): Promise<string> {
-        request.keep_alive = `${this.configHandler.modelKeepAliveTimeMin}m`;
+        request.keep_alive = `${this._configHandler.modelKeepAliveTimeMin}m`;
         request.stream = false;
         return this.request(request);
     }

@@ -4,48 +4,48 @@ import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
 
 export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
-    private ollamaClient: OllamaClient;
-    private configHandler: ConfigHandler;
-    private guiHandler: GuiHandler;
-    private abortController?: AbortController;
-    private debounceTimer?: NodeJS.Timeout;
-    private snoozeTimeout?: NodeJS.Timeout;
-    private isSnoozeActive: boolean;
-    private configChangeDisposable?: vscode.Disposable;
+    private _ollamaClient: OllamaClient;
+    private _configHandler: ConfigHandler;
+    private _guiHandler: GuiHandler;
+    private _abortController?: AbortController;
+    private _debounceTimer?: NodeJS.Timeout;
+    private _snoozeTimeout?: NodeJS.Timeout;
+    private _isSnoozeActive: boolean;
+    private _configChangeDisposable?: vscode.Disposable;
 
     constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler, guiHandler: GuiHandler) {
-        this.ollamaClient = ollamaClient;
-        this.configHandler = configHandler;
-        this.guiHandler = guiHandler;
-        this.isSnoozeActive = false;
+        this._ollamaClient = ollamaClient;
+        this._configHandler = configHandler;
+        this._guiHandler = guiHandler;
+        this._isSnoozeActive = false;
 
-        this.configChangeDisposable = 
-            this.configHandler.onConfigDidChange(() => {
-                if (!this.configHandler.autopilotEnabled) {
+        this._configChangeDisposable = 
+            this._configHandler.onConfigDidChange(() => {
+                if (!this._configHandler.autopilotEnabled) {
                     this.clearSnoozeTimer();
                 }
             });
     }
 
     public dispose(): void {
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
+        if (this._debounceTimer) {
+            clearTimeout(this._debounceTimer);
         }
-        if (this.snoozeTimeout) {
-            clearTimeout(this.snoozeTimeout);
+        if (this._snoozeTimeout) {
+            clearTimeout(this._snoozeTimeout);
         }
-        this.abortController?.abort();
-        this.configChangeDisposable?.dispose();
+        this._abortController?.abort();
+        this._configChangeDisposable?.dispose();
     }
 
 
     private async clearSnoozeTimer(): Promise<void> {
-        if (this.isSnoozeActive) {
-            if (this.snoozeTimeout) {
-                clearTimeout(this.snoozeTimeout);
-                this.snoozeTimeout = undefined;
+        if (this._isSnoozeActive) {
+            if (this._snoozeTimeout) {
+                clearTimeout(this._snoozeTimeout);
+                this._snoozeTimeout = undefined;
             }
-            this.isSnoozeActive = false;
+            this._isSnoozeActive = false;
         }
     }
 
@@ -53,7 +53,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         const textBeforeCursor = document.getText(
             new vscode.Range(document.lineAt(0).range.start, cursorPosition),
         );
-        const maxTextBeforeCursorSize = this.configHandler.textBeforeCursorSize;
+        const maxTextBeforeCursorSize = this._configHandler.textBeforeCursorSize;
         const currentTextLength = textBeforeCursor.length;
 
         if (currentTextLength > maxTextBeforeCursorSize) {
@@ -70,7 +70,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         const textAfterCursor = document.getText(
             new vscode.Range(cursorPosition, document.lineAt(document.lineCount-1).range.end),
         );
-        const maxTextAfterCursorSize = this.configHandler.textAfterCursorSize;
+        const maxTextAfterCursorSize = this._configHandler.textAfterCursorSize;
         const currentTextLength = textAfterCursor.length;
 
         if (currentTextLength > maxTextAfterCursorSize) {
@@ -108,7 +108,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             [textBeforeCursorIntermediatePlaceholder, this.getTextBeforeCursor(document, cursorPosition)],
         ];
 
-        let promptText = this.configHandler.promptText;
+        let promptText = this._configHandler.promptText;
         for (const [key, value] of replacements) {
             promptText = promptText.replaceAll(key, value);
         }
@@ -164,14 +164,14 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                 return reject(new Error("Cancelled before debounce"));
             }
 
-            this.debounceTimer = setTimeout(() => {
+            this._debounceTimer = setTimeout(() => {
                 resolve();
             }, delay);
 
             token.onCancellationRequested(() => {
-                if (this.debounceTimer) {
-                    clearTimeout(this.debounceTimer);
-                    this.debounceTimer = undefined;
+                if (this._debounceTimer) {
+                    clearTimeout(this._debounceTimer);
+                    this._debounceTimer = undefined;
                 }
                 reject(new Error("Cancelled during debounce"));
             });
@@ -179,20 +179,20 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     }
 
     public async snoozeAutopilot(): Promise<void> {
-        if (this.configHandler.autopilotEnabled) {
-            this.guiHandler.showSnoozeMessage();
-            await this.configHandler.setAutopilotEnabledState(false);
-            if (this.snoozeTimeout) {
-                clearTimeout(this.snoozeTimeout);
+        if (this._configHandler.autopilotEnabled) {
+            this._guiHandler.showSnoozeMessage();
+            await this._configHandler.setAutopilotEnabledState(false);
+            if (this._snoozeTimeout) {
+                clearTimeout(this._snoozeTimeout);
             }
-            this.isSnoozeActive = true;
-            this.snoozeTimeout = setTimeout(async () => {
-                if (this.isSnoozeActive) {
-                    this.configHandler.setAutopilotEnabledState(true);
-                    this.snoozeTimeout = undefined;
-                    this.isSnoozeActive = false;
+            this._isSnoozeActive = true;
+            this._snoozeTimeout = setTimeout(async () => {
+                if (this._isSnoozeActive) {
+                    this._configHandler.setAutopilotEnabledState(true);
+                    this._snoozeTimeout = undefined;
+                    this._isSnoozeActive = false;
                 }
-            }, this.configHandler.snoozeTimeMin * 60 * 1000);
+            }, this._configHandler.snoozeTimeMin * 60 * 1000);
         }
     }
 
@@ -202,44 +202,44 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         context: vscode.InlineCompletionContext,
         token: vscode.CancellationToken,
     ): Promise<vscode.InlineCompletionItem[] | vscode.InlineCompletionList | undefined> {
-        if (!this.configHandler.autopilotEnabled) {
+        if (!this._configHandler.autopilotEnabled) {
             return undefined;
         }
 
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
-            this.debounceTimer = undefined;
+        if (this._debounceTimer) {
+            clearTimeout(this._debounceTimer);
+            this._debounceTimer = undefined;
         }
 
-        if (this.abortController) {
-            this.abortController.abort();
-            this.abortController = undefined;
+        if (this._abortController) {
+            this._abortController.abort();
+            this._abortController = undefined;
         }
-        this.abortController = new AbortController();
+        this._abortController = new AbortController();
 
         try {
             if (context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic) {
                 // cancel completion if user only wants manual trigger:
-                if (this.configHandler.suggestionTrigger === "manual") {
+                if (this._configHandler.suggestionTrigger === "manual") {
                     return undefined;
                 }
 
                 // use delay only for automatic trigger:
-                await this.debounce(this.configHandler.autocompleteDelayMs, token);
+                await this.debounce(this._configHandler.autocompleteDelayMs, token);
             }
 
             if (token.isCancellationRequested) {
                 return undefined;
             }
 
-            const model = this.configHandler.modelName;
+            const model = this._configHandler.modelName;
             const prompt = this.createPromptString(document, cursorPosition);
-            const temperature = this.configHandler.temperature;
-            const num_ctx = this.configHandler.contextSize;
-            const num_predict = this.configHandler.maxAutocompleteTokens;
-            const stop = this.configHandler.stopSequences;
+            const temperature = this._configHandler.temperature;
+            const num_ctx = this._configHandler.contextSize;
+            const num_predict = this._configHandler.maxAutocompleteTokens;
+            const stop = this._configHandler.stopSequences;
 
-            const responseString = await this.ollamaClient.generateResponse(
+            const responseString = await this._ollamaClient.generateResponse(
                 {
                     model,
                     prompt,
@@ -250,7 +250,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                         stop,
                     },
                 },
-                this.abortController.signal,
+                this._abortController.signal,
             );
 
             if (token.isCancellationRequested) {
@@ -273,7 +273,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             return undefined;
         }
         finally {
-            this.abortController = undefined;
+            this._abortController = undefined;
         }
     }
 }

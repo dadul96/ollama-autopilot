@@ -18,63 +18,63 @@ enum ActionItems {
 }
 
 export class GuiHandler {
-    private context: vscode.ExtensionContext;
-    private statusBarItem: vscode.StatusBarItem;
-    private configHandler: ConfigHandler;
+    private _context: vscode.ExtensionContext;
+    private _statusBarItem: vscode.StatusBarItem;
+    private _configHandler: ConfigHandler;
 
     constructor(context: vscode.ExtensionContext, configHandler: ConfigHandler) {
-        this.context = context;
-        this.configHandler = configHandler;
+        this._context = context;
+        this._configHandler = configHandler;
 
-        this.statusBarItem = vscode.window.createStatusBarItem(
+        this._statusBarItem = vscode.window.createStatusBarItem(
             vscode.StatusBarAlignment.Right,
             100,
         );
-        this.statusBarItem.text = "🦙 Autopilot";
-        this.statusBarItem.tooltip = "Still loading - Click for options";
-        this.statusBarItem.command = "ollama-autopilot.showMenu";
-        this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+        this._statusBarItem.text = "🦙 Autopilot";
+        this._statusBarItem.tooltip = "Still loading - Click for options";
+        this._statusBarItem.command = "ollama-autopilot.showMenu";
+        this._statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
-        this.statusBarItem.show();
-        this.context.subscriptions.push(this.statusBarItem);
+        this._statusBarItem.show();
+        this._context.subscriptions.push(this._statusBarItem);
     }
 
     public dispose(): void {
-        this.statusBarItem?.dispose();
+        this._statusBarItem?.dispose();
     }  
 
     public indicateOllamaNotAvailable() {
-        this.statusBarItem.tooltip = "Ollama not available - Click for options";
-        this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+        this._statusBarItem.tooltip = "Ollama not available - Click for options";
+        this._statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
     }
 
     public indicateNoValidModelSelected() {
-        this.statusBarItem.tooltip = "No valid model selected - Click for options";
-        this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+        this._statusBarItem.tooltip = "No valid model selected - Click for options";
+        this._statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.errorBackground",
         );
     }
 
     public indicateAutopilotDisabled() {
-        this.statusBarItem.tooltip = "Ollama Autopilot disabled - Click for options";
-        this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+        this._statusBarItem.tooltip = "Ollama Autopilot disabled - Click for options";
+        this._statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.warningBackground",
         );
     }
 
     public indicateOllamaEnabled() {
-        this.statusBarItem.tooltip = "Ollama Autopilot enabled - Click for options";
-        this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+        this._statusBarItem.tooltip = "Ollama Autopilot enabled - Click for options";
+        this._statusBarItem.backgroundColor = new vscode.ThemeColor(
             "statusBarItem.background",
         );
     }
 
     public showOllamaNotAvailableError() {
         vscode.window.showErrorMessage(
-            `Cannot connect to Ollama at ${this.configHandler.baseUrl}. ` +
+            `Cannot connect to Ollama at ${this._configHandler.baseUrl}. ` +
             `Make sure Ollama is running and the URL is correct.`,
             ActionItems.ViewUrlSettings,
             ActionItems.TestConnection,
@@ -107,7 +107,7 @@ export class GuiHandler {
 
     public showWrongModelSelectedError() {
         vscode.window.showWarningMessage(
-                `Completion model "${this.configHandler.modelName}" not found. ` +
+                `Completion model "${this._configHandler.modelName}" not found. ` +
                 `It may have been removed or renamed.`,
                 ActionItems.SelectModel
             )
@@ -123,13 +123,13 @@ export class GuiHandler {
             placeHolder: "Select model",
         });
         if (selected) {
-            await this.configHandler.setModelName(selected);
+            await this._configHandler.setModelName(selected);
         }
     }
 
     public async showSnoozeMessage() {
         vscode.window.showInformationMessage(
-            `Autopilot will snooze for ${this.configHandler.snoozeTimeMin} minutes`
+            `Autopilot will snooze for ${this._configHandler.snoozeTimeMin} minutes`
         );
     }
 
@@ -137,7 +137,7 @@ export class GuiHandler {
         const quickPick = vscode.window.createQuickPick<MenuItem>();
         const items: MenuItem[] = [
             {
-                label: this.configHandler.autopilotEnabled
+                label: this._configHandler.autopilotEnabled
                     ? `$(debug-stop) Click to disable Ollama Autopilot`
                     : `$(debug-start) Click to enable Ollama Autopilot`,
                 action: ActionItems.Toggle,
@@ -146,7 +146,7 @@ export class GuiHandler {
             { label: "", kind: vscode.QuickPickItemKind.Separator }, // separator for visual grouping
 
             {
-                label: `$(debug-pause) Snooze Autopilot for ${this.configHandler.snoozeTimeMin} minutes`,
+                label: `$(debug-pause) Snooze Autopilot for ${this._configHandler.snoozeTimeMin} minutes`,
                 action: ActionItems.Snooze,
             },
 
@@ -184,7 +184,7 @@ export class GuiHandler {
     private executeAction(action: string): void {
         switch (action) {
             case ActionItems.Toggle:
-                if (this.configHandler.autopilotEnabled) {
+                if (this._configHandler.autopilotEnabled) {
                     vscode.commands.executeCommand("ollama-autopilot.disable");
                 } else {
                     vscode.commands.executeCommand("ollama-autopilot.enable");
@@ -209,7 +209,7 @@ export class GuiHandler {
                 );
                 break;
             case ActionItems.TestConnection:
-                vscode.env.openExternal(vscode.Uri.parse(this.configHandler.baseUrl));
+                vscode.env.openExternal(vscode.Uri.parse(this._configHandler.baseUrl));
                 break;
             case ActionItems.InstallOllama:
                 vscode.env.openExternal(vscode.Uri.parse("https://ollama.com/download"));
