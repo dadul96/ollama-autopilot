@@ -2,21 +2,24 @@ import * as vscode from "vscode";
 import { OllamaClient } from "./ollamaClient";
 import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
+import { Logger } from "./logger";
 
 export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
     private _ollamaClient: OllamaClient;
     private _configHandler: ConfigHandler;
     private _guiHandler: GuiHandler;
+    private _logger?: Logger;
     private _abortController?: AbortController;
     private _debounceTimer?: NodeJS.Timeout;
     private _snoozeTimeout?: NodeJS.Timeout;
     private _isSnoozeActive: boolean;
     private _configChangeDisposable?: vscode.Disposable;
 
-    constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler, guiHandler: GuiHandler) {
+    constructor(ollamaClient: OllamaClient, configHandler: ConfigHandler, guiHandler: GuiHandler, logger?: Logger) {
         this._ollamaClient = ollamaClient;
         this._configHandler = configHandler;
         this._guiHandler = guiHandler;
+        this._logger = logger;
         this._isSnoozeActive = false;
 
         this._configChangeDisposable = 
@@ -112,6 +115,8 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
         for (const [key, value] of replacements) {
             promptText = promptText.replaceAll(key, value);
         }
+        
+        this._logger?.info(`[Prompt Text]:\n${promptText}`);
 
         return promptText;
     }
@@ -239,6 +244,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
             const num_predict = this._configHandler.maxAutocompleteTokens;
             const stop = this._configHandler.stopSequences;
 
+            this._logger?.info(`[Request code completion from Ollama]`);
             const responseString = await this._ollamaClient.generateResponse(
                 {
                     model,
@@ -252,6 +258,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                 },
                 this._abortController.signal,
             );
+            this._logger?.info(`[Received code completion from Ollama]`);
 
             if (token.isCancellationRequested) {
                 return undefined;
@@ -270,6 +277,7 @@ export class AutopilotProvider implements vscode.InlineCompletionItemProvider {
                 ),
             ];
         } catch (error) {
+            this._logger?.error(`[AutopilotProvider.provideInlineCompletionItems()]: ${error}`);
             return undefined;
         }
         finally {

@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to the "ollama-autopilot" extension will be documented in this file.
 
+## [1.x.x](https://github.com/dadul96/ollama-autopilot/releases/tag/v1.x.x) - 2026-03-01
+### Added
+- Option to enable/disable debug log messages
+
+### Fixed
+- Order of config properties
+
+
 ## [1.2.0](https://github.com/dadul96/ollama-autopilot/releases/tag/v1.2.0) - 2026-02-28
 ### Added
 - Config option to define custom stop sequence strings (needed for Fill-in-the-Middle (FIM))

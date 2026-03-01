@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
+import { Logger } from "./logger";
 
 export interface OllamaRequest {
     model: string;
@@ -36,10 +37,12 @@ export class OllamaClient {
     private _configHandler: ConfigHandler;
     private _guiHandler: GuiHandler;
     private _availableModels: string[] = [];
+    private _logger?: Logger;
 
-    constructor(configHandler: ConfigHandler, guiHandler: GuiHandler) {
+    constructor(configHandler: ConfigHandler, guiHandler: GuiHandler, logger?: Logger) {
         this._configHandler = configHandler;
         this._guiHandler = guiHandler;
+        this._logger = logger;
     }
     
     private async pingOllama(): Promise<boolean> {
@@ -52,7 +55,8 @@ export class OllamaClient {
                 signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT_MS)
             });
             return response.ok;
-        } catch {
+        } catch(error) {
+            this._logger?.error(`[OllamaClient.pingOllama()]: ${error}`);
             return false;
         }
     }
@@ -73,7 +77,8 @@ export class OllamaClient {
             
             const data = await response.json();
             return (data as OllamaTagsResponse).models?.map((m: any) => m.name) || [];
-        } catch {
+        } catch(error) {
+            this._logger?.error(`[OllamaClient.getModels()]: ${error}`);
             return [];
         }
     }
@@ -103,7 +108,7 @@ export class OllamaClient {
             if (error instanceof Error && error.name === 'AbortError') {
                 return "";
             }
-            console.error('Ollama API error: ', error);
+            this._logger?.error(`[OllamaClient.request()]: ${error}`);
             throw error;
         }
     }
@@ -132,6 +137,7 @@ export class OllamaClient {
             }            
             return true;
         } catch (error) {
+            this._logger?.error(`[OllamaClient.listAvailableModels()]: ${error}`);
             return false;
         }
     }
@@ -148,6 +154,7 @@ export class OllamaClient {
             return true;
 
         } catch (error) {
+            this._logger?.error(`[OllamaClient.validateSelectedModel()]: ${error}`);
             return false;
         }
     }

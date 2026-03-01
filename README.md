@@ -106,6 +106,11 @@ Before using this extension:
 | `ollama-autopilot.prompt.textAfterCursorSize` | Characters (not tokens) after cursor to include | `0` |
 | `ollama-autopilot.prompt.promptText` | Prompt template | See default |
 
+### Debug
+| Setting | Description | Default |
+| --- | --- | --- |
+| `ollama-autopilot.debug.loggingEnabled` | Enable/disable debug log messages | `false` |
+
 ## 🎛 Commands
 Available via Command Palette:
 - `Ollama Autopilot: Show Menu`

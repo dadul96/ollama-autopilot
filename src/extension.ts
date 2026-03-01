@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Logger } from "./logger";
 import { ConfigHandler } from "./configHandler";
 import { GuiHandler } from "./guiHandler";
 import { OllamaClient } from "./ollamaClient";
@@ -6,10 +7,11 @@ import { AutopilotProvider } from "./autopilotProvider";
 
 
 export async function activate(context: vscode.ExtensionContext) {
-	const configHandler = new ConfigHandler();
+    const logger = new Logger(context);
+	const configHandler = new ConfigHandler(logger);
 	const guiHandler = new GuiHandler(context, configHandler);
-    const ollamaClient = new OllamaClient(configHandler, guiHandler);
-	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler, guiHandler);
+    const ollamaClient = new OllamaClient(configHandler, guiHandler, logger);
+	const autopilotProvider = new AutopilotProvider(ollamaClient, configHandler, guiHandler, logger);
 
     context.subscriptions.push(configHandler); 
     context.subscriptions.push(guiHandler);
